@@ -1,0 +1,4 @@
+button {
+  /* don't allow double-tap zoom on any buttons */
+  touch-action: manipulation;
+}

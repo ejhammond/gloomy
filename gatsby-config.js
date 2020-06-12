@@ -1,34 +1,51 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: "Gloomkit",
+    description: "Companion app for the game, Gloomhaven",
+    author: "@tripphamm",
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
+    "gatsby-plugin-react-helmet",
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: "gatsby-source-filesystem",
       options: {
-        name: `images`,
+        name: "images",
         path: `${__dirname}/src/images`,
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
+    "gatsby-transformer-sharp",
+    "gatsby-plugin-sharp",
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: "gatsby-plugin-manifest",
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
-        start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        name: "Gloomkit",
+        short_name: "Gloomkit",
+        start_url: "/",
+        background_color: "#412113",
+        theme_color: "#412113",
+        display: "minimal-ui",
+        icon: "src/images/effects/immobilize.png", // This path is relative to the root of the site.
       },
     },
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+    "gatsby-plugin-offline",
+    "gatsby-plugin-typescript",
+    {
+      resolve: "gatsby-plugin-create-client-paths",
+      options: { prefixes: ["/app/*"] },
+    },
+    {
+      resolve: "gatsby-plugin-firebase",
+      options: {
+        credentials: {
+          apiKey: "AIzaSyD8_O0fjciEkmWLgFdPhv9pjHZHACv2UZ0",
+          authDomain: "gloomkit-tjh891.firebaseapp.com",
+          databaseURL: "https://gloomkit-tjh891.firebaseio.com",
+          projectId: "gloomkit-tjh891",
+          storageBucket: "gloomkit-tjh891.appspot.com",
+          messagingSenderId: "862047503960",
+          appId: "1:862047503960:web:d59919271dca85735a6c2d",
+        },
+      },
+    },
   ],
 }

@@ -1,7 +1,9 @@
-/**
- * Implement Gatsby's Browser APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/browser-apis/
- */
+import * as React from "react"
+import { Providers } from "./src/providers"
 
-// You can delete this file if you're not using it
+import "firebase/auth"
+import "firebase/firestore"
+
+export const wrapPageElement = ({ element, props }) => (
+  <Providers {...props}>{element}</Providers>
+)
