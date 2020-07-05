@@ -9,7 +9,7 @@ import MenuIcon from "@material-ui/icons/Menu"
 
 import { Index } from "./index"
 import { Deck } from "./deck"
-import { Perks } from "./perks"
+import { Items } from "./items"
 import { ClassIcon } from "../../../../components/icons/class-icon"
 import { useCharacter } from "./state"
 import { Loading } from "../../../../providers/loading"
@@ -59,7 +59,7 @@ export const Character: React.FC<RouteComponentProps<{
   `)
 
   const { character, dispatchCharacterAction, status, error } = useCharacter(
-    characterId
+    characterId,
   )
 
   // character will be undefined if it existed in the query cache during a given session
@@ -92,7 +92,7 @@ export const Character: React.FC<RouteComponentProps<{
           <Router>
             <Index path="/" />
             <Deck path="/deck" />
-            <Perks path="/perks" />
+            <Items path="/items" />
           </Router>
         </CharacterRouteContextProvider>
       </div>
@@ -166,9 +166,9 @@ export const Character: React.FC<RouteComponentProps<{
                 </div>
               </Icon>
             }
-            to="perks"
-            label="Perks"
-            value="perks"
+            to="items"
+            label="Items"
+            value="items"
           />
           <BottomNavigationAction
             component={Link}

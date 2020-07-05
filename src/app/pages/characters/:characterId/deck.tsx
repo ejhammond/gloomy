@@ -93,7 +93,7 @@ export function Deck(props: RouteComponentProps) {
   const { character } = useCharacterRouteContext()
 
   const [drawnCards, setDrawnCards] = React.useState(
-    new Map<AttackModifierCardType, number>()
+    new Map<AttackModifierCardType, number>(),
   )
 
   const klass =
@@ -143,7 +143,7 @@ export function Deck(props: RouteComponentProps) {
           }
           drawnCardsClone.set(
             drawnCard.cardType,
-            drawnCardsClone.get(drawnCard.cardType) + 1
+            drawnCardsClone.get(drawnCard.cardType) + 1,
           )
           setDrawnCards(drawnCardsClone)
         }}

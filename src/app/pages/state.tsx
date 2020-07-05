@@ -39,7 +39,15 @@ export function useUserSettings() {
       .doc(user.id)
       .get()
 
-    return snapshot.data() as UserSettings
+    const data = snapshot.data() as UserSettings | undefined
+
+    if (data === undefined) {
+      return {
+        unlocks: {},
+      }
+    }
+
+    return data
   })
 
   const [mutate] = useMutation(
@@ -72,7 +80,7 @@ export function useUserSettings() {
       onSettled: () => {
         queryCache.refetchQueries(queryKey)
       },
-    }
+    },
   )
 
   const dispatchUserSettingsAction = React.useCallback(
@@ -81,7 +89,7 @@ export function useUserSettings() {
 
       mutate(nextState)
     },
-    [userSettings, mutate]
+    [userSettings, mutate],
   )
 
   return { userSettings, dispatchUserSettingsAction, status, error }

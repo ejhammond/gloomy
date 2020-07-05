@@ -17,20 +17,38 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
     dispatchCharactersListAction,
   } = useCharactersRouteContext()
 
+  const charactersListValues = Object.values(charactersList)
+
   return (
-    <GridContainer
-      component="ul"
-      style={{ listStyleType: "none", paddingLeft: 0 }}
-    >
-      {Object.values(charactersList)
-        .filter(character => character !== undefined)
-        .map(character => {
-          return (
-            <GridItem key={character.id} component="li" span={4}>
-              <CharacterRow character={character} />
-            </GridItem>
-          )
-        })}
+    <>
+      {charactersListValues.length === 0 && (
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Typography>
+            In order to add a character, tap the plus button
+          </Typography>
+        </div>
+      )}
+      <GridContainer
+        component="ul"
+        style={{ listStyleType: "none", paddingLeft: 0 }}
+      >
+        {charactersListValues
+          .filter(character => character !== undefined)
+          .map(character => {
+            return (
+              <GridItem key={character.id} component="li" span={4}>
+                <CharacterRow character={character} />
+              </GridItem>
+            )
+          })}
+      </GridContainer>
       <FloatingActionButton
         color="primary"
         style={{
@@ -44,7 +62,7 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
       >
         <AddIcon />
       </FloatingActionButton>
-    </GridContainer>
+    </>
   )
 }
 
