@@ -19,7 +19,7 @@ import { classesById } from "../../../../configs/classes"
 import { getLevel } from "../../../../configs/levels"
 import { AttackModifierCard } from "../../../../components/attack-modifier-card"
 import { HStack } from "../../../../components/h-stack"
-import { parseCardType } from "../../../../configs/cards"
+import { parse } from "../../../../configs/cards"
 import { useCharacterRouteContext } from "./routes"
 import { useCharactersRouteContext } from "../routes"
 import { useAppRouteContext } from "../../routes"
@@ -479,10 +479,7 @@ function PerkDescription({
             : a.count,
         )
         descriptionParts.push(
-          <AttackModifierCard
-            variant="inline"
-            card={parseCardType(a.cardType)}
-          />,
+          <AttackModifierCard variant="inline" card={parse(a.cardType)} />,
         )
         descriptionParts.push(a.count === 1 ? "card" : "cards")
         if (i < add.length - 1) {
@@ -497,10 +494,7 @@ function PerkDescription({
             : r.count,
         )
         descriptionParts.push(
-          <AttackModifierCard
-            variant="inline"
-            card={parseCardType(r.cardType)}
-          />,
+          <AttackModifierCard variant="inline" card={parse(r.cardType)} />,
         )
         descriptionParts.push(r.count === 1 ? "card" : "cards")
         if (i < remove.length - 1) {

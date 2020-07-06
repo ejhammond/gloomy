@@ -24,8 +24,6 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
       {charactersListValues.length === 0 && (
         <div
           style={{
-            height: "100%",
-            width: "100%",
             display: "flex",
             justifyContent: "center",
           }}

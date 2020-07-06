@@ -1,14 +1,21 @@
 import * as React from "react"
 import sample from "lodash.sample"
-
+import { graphql, useStaticQuery } from "gatsby"
+import { useTransition, animated, useSpring } from "react-spring"
+import Img from "gatsby-image"
 import { RouteComponentProps } from "@reach/router"
+import FloatingActionButton from "@material-ui/core/Fab"
+
 import { GridContainer, GridItem } from "../../../../components/grid"
 import { DeckModifications, AttackModifierCardType } from "../../../../types"
 import { useCharacterRouteContext } from "./routes"
 import { classesById } from "../../../../configs/classes"
 import { perks } from "../../../../configs/perks"
 import { AttackModifierCard } from "../../../../components/attack-modifier-card"
-import { parseCardType } from "../../../../configs/cards"
+import { parse } from "../../../../configs/cards"
+import Typography from "@material-ui/core/Typography"
+
+const AnimatedGridItem = animated(GridItem)
 
 const baseDeckModifications: DeckModifications = {
   add: [
@@ -46,7 +53,7 @@ const baseDeckModifications: DeckModifications = {
 function deckFromMap(map: Map<AttackModifierCardType, number>) {
   return Array.from(map.entries()).reduce((d, [cardType, count]) => {
     if (count > 0) {
-      const card = parseCardType(cardType)
+      const card = parse(cardType)
       Array.from({ length: count }).forEach(() => {
         d.push({
           cardType,
@@ -90,10 +97,48 @@ function makeDeck(deckModifications: DeckModifications[]) {
 }
 
 export function Deck(props: RouteComponentProps) {
+  const data = useStaticQuery(graphql`
+    query {
+      drawCard: file(relativePath: { eq: "general/draw-card.png" }) {
+        childImageSharp {
+          fluid(maxWidth: 56) {
+            ...GatsbyImageSharpFluid
+          }
+        }
+      }
+      shuffle: file(relativePath: { eq: "general/shuffle.png" }) {
+        childImageSharp {
+          fluid(maxWidth: 56) {
+            ...GatsbyImageSharpFluid
+          }
+        }
+      }
+    }
+  `)
+
   const { character } = useCharacterRouteContext()
 
-  const [drawnCards, setDrawnCards] = React.useState(
-    new Map<AttackModifierCardType, number>(),
+  const [drawnCards, setDrawnCards] = React.useState([])
+
+  const drawnCardTransitions = useTransition(
+    drawnCards.map((dc, index) => ({
+      ...dc,
+      key: drawnCards.length - index,
+      index,
+    })),
+    dc => dc.key,
+    {
+      from: { transform: "translate3d(0px,-100%,0px)", opacity: 0 },
+      enter: ({ index }) => ({
+        transform: `translate3d(0px,${index * 105}%,0px)`,
+        opacity: 1,
+      }),
+      update: ({ index }) => ({
+        transform: `translate3d(0px,${index * 105}%,0px)`,
+        opacity: 1,
+      }),
+      leave: { transform: "translate3d(-300%,0px,0px)", opacity: 1 },
+    },
   )
 
   const klass =
@@ -113,12 +158,13 @@ export function Deck(props: RouteComponentProps) {
       })
     }
   })
-  Array.from(drawnCards.entries()).forEach(([cardType, count]) => {
+
+  drawnCards.forEach(({ cardType }) => {
     deckModifications.push({
       remove: [
         {
           cardType,
-          count,
+          count: 1,
         },
       ],
     })
@@ -128,33 +174,61 @@ export function Deck(props: RouteComponentProps) {
 
   return (
     <GridContainer>
-      {deck.map(({ card, cardType }, i) => (
-        <GridItem key={i} span={1}>
-          <AttackModifierCard variant="full" card={card} />
-        </GridItem>
-      ))}
-      <button
+      <GridItem span={3} style={{ position: "relative" }}>
+        {drawnCardTransitions.map(({ item, props, key }, i) => (
+          <animated.div
+            key={key}
+            style={{
+              position: "absolute",
+              width: "100%",
+              ...props,
+            }}
+          >
+            <div style={{ width: "90%", maxWidth: 400 }}>
+              <AttackModifierCard variant="full" card={item.card} />
+            </div>
+          </animated.div>
+        ))}
+      </GridItem>
+      <FloatingActionButton
+        size="small"
+        color="primary"
+        style={{
+          zIndex: 10,
+          position: "fixed",
+          bottom: 140,
+          right: 40,
+        }}
+        disabled={drawnCards.length === 0}
+        onClick={() => {
+          setDrawnCards([])
+        }}
+      >
+        <Img
+          style={{ width: "65%" }}
+          fluid={data.shuffle.childImageSharp.fluid}
+        />
+      </FloatingActionButton>
+      <FloatingActionButton
+        color="primary"
+        style={{
+          zIndex: 10,
+          position: "fixed",
+          bottom: 80,
+          right: 40,
+        }}
+        disabled={deck.length === 0}
         onClick={() => {
           const drawnCard = sample(deck)
 
-          const drawnCardsClone = new Map(Array.from(drawnCards))
-          if (!drawnCardsClone.has(drawnCard.cardType)) {
-            drawnCardsClone.set(drawnCard.cardType, 0)
-          }
-          drawnCardsClone.set(
-            drawnCard.cardType,
-            drawnCardsClone.get(drawnCard.cardType) + 1,
-          )
-          setDrawnCards(drawnCardsClone)
+          setDrawnCards([drawnCard, ...drawnCards])
         }}
       >
-        Draw
-      </button>
-      {deckFromMap(drawnCards).map(({ card }, i) => (
-        <GridItem key={i} span={1}>
-          <AttackModifierCard variant="full" card={card} />
-        </GridItem>
-      ))}
+        <Img
+          style={{ width: "65%" }}
+          fluid={data.drawCard.childImageSharp.fluid}
+        />
+      </FloatingActionButton>
     </GridContainer>
   )
 }

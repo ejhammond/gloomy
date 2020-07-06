@@ -40,9 +40,7 @@ function parseAspectType(aspectType: string): AttackModifierCardAspect {
   }
 }
 
-export function parseCardType(
-  cardType: AttackModifierCardType
-): AttackModifierCard {
+export function parse(cardType: AttackModifierCardType): AttackModifierCard {
   const [primaryAspectType, secondaryAspectType, ...flags] = cardType.split("/")
 
   return {
@@ -54,3 +52,25 @@ export function parseCardType(
     discard: flags.includes("discard"),
   }
 }
+
+// export function stringify(card: AttackModifierCard) {
+//   const { primaryAspect, secondaryAspect, rolling, shuffle, discard } = card
+
+//   return [
+//     `${primaryAspect.type}${
+//       primaryAspect.value !== undefined ? `(${primaryAspect.value})` : ""
+//     }`,
+//     secondaryAspect !== null
+//       ? `${secondaryAspect.type}${
+//           secondaryAspect.value !== undefined
+//             ? `(${secondaryAspect.value})`
+//             : ""
+//         }`
+//       : "-",
+//     rolling ? "rolling" : undefined,
+//     shuffle ? "shuffle" : undefined,
+//     discard ? "discard" : undefined,
+//   ]
+//     .filter(Boolean) // remove undefined
+//     .join("/")
+// }
