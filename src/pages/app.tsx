@@ -46,7 +46,7 @@ export default function AppPage() {
 
   return (
     <UserProvider>
-      <Layout pageTitle="Gloomkit">
+      <Layout pageTitle="Gloomy">
         <UserGate>
           <App />
         </UserGate>

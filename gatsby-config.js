@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: "Gloomkit",
+    title: "Gloomy",
     description: "Companion app for the game, Gloomhaven",
     author: "@tripphamm",
   },
@@ -18,8 +18,8 @@ module.exports = {
     {
       resolve: "gatsby-plugin-manifest",
       options: {
-        name: "Gloomkit",
-        short_name: "Gloomkit",
+        name: "Gloomy",
+        short_name: "Gloomy",
         start_url: "/",
         background_color: "#412113",
         theme_color: "#412113",
@@ -37,13 +37,13 @@ module.exports = {
       resolve: "gatsby-plugin-firebase",
       options: {
         credentials: {
-          apiKey: "AIzaSyD8_O0fjciEkmWLgFdPhv9pjHZHACv2UZ0",
-          authDomain: "gloomkit-tjh891.firebaseapp.com",
-          databaseURL: "https://gloomkit-tjh891.firebaseio.com",
-          projectId: "gloomkit-tjh891",
-          storageBucket: "gloomkit-tjh891.appspot.com",
-          messagingSenderId: "862047503960",
-          appId: "1:862047503960:web:d59919271dca85735a6c2d",
+          apiKey: "AIzaSyCLjlo8SvnNbiPjk5WbTT6coUfdk2Uf3rw",
+          authDomain: "gloomy-891.firebaseapp.com",
+          databaseURL: "https://gloomy-891.firebaseio.com",
+          projectId: "gloomy-891",
+          storageBucket: "gloomy-891.appspot.com",
+          messagingSenderId: "279868914446",
+          appId: "1:279868914446:web:4789148556b44838d9355f",
         },
       },
     },
