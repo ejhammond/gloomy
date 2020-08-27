@@ -63,7 +63,7 @@ export type AttackModifierCardType =
   // plus 1
   | "damage(1)/-"
   | "damage(1)/-/rolling"
-  | "damage(1)/curse"
+  | "damage(1)/add-curse"
   | "damage(1)/heal(2)"
   | "damage(1)/infuse(dark)"
   | "damage(1)/infuse(earth)"
@@ -81,7 +81,7 @@ export type AttackModifierCardType =
   // plus 2
   | "damage(2)/-"
   | "damage(2)/-/rolling"
-  | "damage(2)/curse"
+  | "damage(2)/add-curse"
   | "damage(2)/infuse(fire)"
   | "damage(2)/infuse(ice)"
   | "damage(2)/status(muddle)"

@@ -155,7 +155,7 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           to="/app/unlocks"
           style={{ textDecoration: "underline" }}
         >
-          <Typography>Configured unlocked classes</Typography>
+          <Typography>Configure unlocked classes</Typography>
         </Link>
       </GridItem>
       <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>

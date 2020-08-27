@@ -118,8 +118,8 @@ function InlineAspect({
         <span style={{ textTransform: "uppercase" }}>{aspect.type}</span>
         <Icon>
           {/**
-       // @ts-ignore type is guaranteed to be push/pull/pierce */}
-          <DiamondIcon type="bless" />
+       // @ts-ignore type is guaranteed to be add-blessing */}
+          <DiamondIcon type="add-blessing" />
         </Icon>
       </HStack>
     )
@@ -131,8 +131,8 @@ function InlineAspect({
         <span style={{ textTransform: "uppercase" }}>{aspect.type}</span>
         <Icon>
           {/**
-       // @ts-ignore type is guaranteed to be push/pull/pierce */}
-          <DiamondIcon type="curse" />
+       // @ts-ignore type is guaranteed to be add-curse */}
+          <DiamondIcon type="add-curse" />
         </Icon>
       </HStack>
     )
@@ -168,7 +168,7 @@ export function InlineAttackModifierCard({
     icons.push(
       <Icon key="rolling" aria-hidden>
         <DiamondIcon type="rolling" />
-      </Icon>
+      </Icon>,
     )
   }
 
@@ -176,7 +176,7 @@ export function InlineAttackModifierCard({
 
   if (secondaryAspect !== null) {
     icons.push(
-      <InlineAspect key="secondary" aspect={secondaryAspect} aria-hidden />
+      <InlineAspect key="secondary" aspect={secondaryAspect} aria-hidden />,
     )
   }
 

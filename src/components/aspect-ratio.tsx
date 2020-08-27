@@ -1,18 +1,21 @@
 import * as React from "react"
 
-const AspectRatioBase = React.forwardRef((props, ref) => {
+type AspectRatioBaseProps = React.HTMLAttributes<HTMLDivElement> & {
+  aspectRatio: number
+}
+
+const AspectRatioBase: React.FC<AspectRatioBaseProps> = function AspectRatioBase(
+  props,
+) {
   const {
     aspectRatio,
 
-    className,
     style = {},
     ...otherProps
   } = props
 
   return (
     <div
-      ref={ref}
-      className={className}
       style={{
         position: "relative",
         paddingBottom: `${aspectRatio * 100}%`,
@@ -22,18 +25,15 @@ const AspectRatioBase = React.forwardRef((props, ref) => {
       {...otherProps}
     />
   )
-})
+}
 
-AspectRatioBase.displayName = "AspectRatioBase"
-
-export { AspectRatioBase }
-
-const AspectRatioContent = React.forwardRef((props, ref) => {
-  const { style = {}, ...otherProps } = props
+const AspectRatioContent: React.FC<React.HTMLAttributes<
+  HTMLDivElement
+>> = function AspectRatioContent(props) {
+  const { style = {}, ...delegated } = props
 
   return (
     <div
-      ref={ref}
       style={{
         position: "absolute",
         top: 0,
@@ -42,29 +42,22 @@ const AspectRatioContent = React.forwardRef((props, ref) => {
         height: "100%",
         ...style,
       }}
-      {...otherProps}
+      {...delegated}
     />
   )
-})
+}
 
-AspectRatioContent.displayName = "AspectRatioContent"
-
-export { AspectRatioContent }
-
-const AspectRatio = React.forwardRef((props, ref) => {
-  const {
-    contentProps = {},
-
-    children,
-    ...baseProps
-  } = props
+const AspectRatio: React.FC<AspectRatioBaseProps> = function AspectRatio(
+  props,
+) {
+  const { children, ...delegated } = props
 
   return (
-    <AspectRatioBase ref={ref} {...baseProps}>
-      <AspectRatioContent {...contentProps}>{children}</AspectRatioContent>
+    <AspectRatioBase {...delegated}>
+      <AspectRatioContent>{children}</AspectRatioContent>
     </AspectRatioBase>
   )
-})
+}
 
 AspectRatio.displayName = "AspectRatio"
 

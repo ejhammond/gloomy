@@ -100,6 +100,7 @@ export const Character: React.FC<RouteComponentProps<{
         style={{
           zIndex: 4,
 
+          marginLeft: "-16px",
           position: "fixed",
           width: "100%",
           maxWidth: 960,

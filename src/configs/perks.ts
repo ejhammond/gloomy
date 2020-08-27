@@ -115,7 +115,7 @@ export const perks: { [id: string]: PerkData } = {
     deckModifications: {
       add: [
         {
-          cardType: "damage(1)/curse",
+          cardType: "damage(1)/add-curse",
           count: 1,
         },
       ],
@@ -679,7 +679,7 @@ export const perks: { [id: string]: PerkData } = {
     deckModifications: {
       add: [
         {
-          cardType: "damage(2)/curse",
+          cardType: "damage(2)/add-curse",
           count: 1,
         },
       ],

@@ -130,14 +130,14 @@ export function Deck(props: RouteComponentProps) {
     {
       from: { transform: "translate3d(0px,-100%,0px)", opacity: 0 },
       enter: ({ index }) => ({
-        transform: `translate3d(0px,${index * 105}%,0px)`,
+        transform: `translate3d(0px,${index * 100}%,0px)`,
         opacity: 1,
       }),
       update: ({ index }) => ({
-        transform: `translate3d(0px,${index * 105}%,0px)`,
+        transform: `translate3d(0px,${index * 100}%,0px)`,
         opacity: 1,
       }),
-      leave: { transform: "translate3d(-300%,0px,0px)", opacity: 1 },
+      leave: { transform: "translate3d(0px,0px,0px)", opacity: 0 },
     },
   )
 
@@ -174,13 +174,19 @@ export function Deck(props: RouteComponentProps) {
 
   return (
     <GridContainer>
-      <GridItem span={3} style={{ position: "relative" }}>
+      <GridItem
+        span={3}
+        style={{
+          position: "relative",
+        }}
+      >
         {drawnCardTransitions.map(({ item, props, key }, i) => (
           <animated.div
             key={key}
             style={{
               position: "absolute",
               width: "100%",
+              paddingBottom: 16,
               ...props,
             }}
           >

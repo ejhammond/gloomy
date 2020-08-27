@@ -18,8 +18,8 @@ import woundIconURL from "../../images/effects/wound.png"
 
 export type DiamondIconType =
   | "add-target"
-  | "bless"
-  | "curse"
+  | "add-bless"
+  | "add-curse"
   | "disarm"
   | "immobilize"
   | "invisible"
@@ -35,8 +35,8 @@ export type DiamondIconType =
 
 const iconURLs: Record<DiamondIconType, string> = {
   "add-target": addTargetIconURL,
-  bless: blessIconURL,
-  curse: curseIconURL,
+  "add-bless": blessIconURL,
+  "add-curse": curseIconURL,
   disarm: disarmIconURL,
   immobilize: immobilizeIconURL,
   invisible: invisibleIconURL,
@@ -53,8 +53,8 @@ const iconURLs: Record<DiamondIconType, string> = {
 
 const iconNames: Record<DiamondIconType, string> = {
   "add-target": "Add target",
-  bless: "Bless",
-  curse: "Curse",
+  "add-bless": "Add blessing",
+  "add-curse": "Add curse",
   disarm: "Disarm",
   immobilize: "Immobilize",
   invisible: "Invisible",

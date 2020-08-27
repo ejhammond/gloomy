@@ -11,8 +11,12 @@ import { statuses } from "../../configs/statuses"
 import { ElementIcon } from "../icons/element-icon"
 import { HealIcon } from "../icons/heal-icon"
 import { DiamondIcon } from "../icons/diamond-icon"
+import { PierceIcon } from "../icons/pierce-icon"
+import { PushIcon } from "../icons/push-icon"
+import { PullIcon } from "../icons/pull-icon"
 import { ShieldIcon } from "../icons/shield-icon"
 import { ShuffleIcon } from "../icons/shuffle-icon"
+import { RefreshItemIcon } from "../icons/refresh-item-icon"
 import { AspectRatio } from "../aspect-ratio"
 import { attackModifierCardToString } from "./text"
 
@@ -27,7 +31,6 @@ import plus1ImageURL from "../../images/card-layers/plus-1.png"
 import plus2ImageURL from "../../images/card-layers/plus-2.png"
 import plus3ImageURL from "../../images/card-layers/plus-3.png"
 import plus4ImageURL from "../../images/card-layers/plus-4.png"
-import backImageURL from "../../images/card-layers/back.jpg"
 import frontImageURL from "../../images/card-layers/front.jpg"
 
 function Aspect({
@@ -97,13 +100,27 @@ function Aspect({
   }
 
   if (type === "refresh-item") {
-    return <span>Refresh an item</span>
+    return <RefreshItemIcon />
   }
 
-  if (["pull", "push", "pierce"].includes(type)) {
-    const NumericalAspect = aspect as NumericalAspect
-    // @ts-ignore type is guaranteed to be push/pull/pierce
-    return <DiamondIcon type={NumericalAspect.type} />
+  if (type === "pierce") {
+    const numericalAspect = aspect as NumericalAspect
+    return <PierceIcon value={numericalAspect.value} />
+  }
+
+  if (type === "push") {
+    const numericalAspect = aspect as NumericalAspect
+    return <PushIcon value={numericalAspect.value} />
+  }
+
+  if (type === "pull") {
+    const numericalAspect = aspect as NumericalAspect
+    return <PullIcon value={numericalAspect.value} />
+  }
+
+  if (["add-target", "add-curse", "add-blessing"].includes(type)) {
+    // @ts-ignore type is guaranteed to be add-target, add-curse or add-blessing
+    return <DiamondIcon type={type} />
   }
 
   if (type === "status") {
@@ -123,7 +140,7 @@ const colors = {
 }
 
 function aspectToColor(
-  aspect: AttackModifierCardType["primaryAspect"]
+  aspect: AttackModifierCardType["primaryAspect"],
 ): keyof typeof colors {
   switch (aspect.type) {
     case "damage":
@@ -162,7 +179,7 @@ const layerURLs = {
 function aspectToLayer(
   aspect:
     | AttackModifierCardType["primaryAspect"]
-    | AttackModifierCardType["secondaryAspect"]
+    | AttackModifierCardType["secondaryAspect"],
 ): keyof typeof layerURLs {
   if (aspect.type === "damage") {
     const damageAspect = aspect as NumericalAspect
@@ -192,7 +209,7 @@ function aspectToLayer(
   }
 
   throw new Error(
-    "Aspect " + aspect.type + " does not have a corresponding layer"
+    "Aspect " + aspect.type + " does not have a corresponding layer",
   )
 }
 
@@ -260,7 +277,7 @@ export function FullAttackModifierCard({
           }}
         />
         {["damage", "miss", "critical", "blessing", "curse"].includes(
-          primaryAspect.type
+          primaryAspect.type,
         ) ? (
           <AttackModifierCardLayer layer={aspectToLayer(primaryAspect)} />
         ) : (
