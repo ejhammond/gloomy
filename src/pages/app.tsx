@@ -5,6 +5,7 @@ import firebase from "gatsby-plugin-firebase"
 import { App } from "../app/pages/routes"
 import { Layout } from "../components/layout"
 import { UserProvider, useAuthState } from "../app/providers/auth"
+import SEO from "../components/seo"
 
 function UserGate({ children }) {
   const { status } = useAuthState()
@@ -46,6 +47,8 @@ export default function AppPage() {
 
   return (
     <UserProvider>
+      <SEO title="App" />
+
       <Layout pageTitle="Gloomy">
         <UserGate>
           <App />

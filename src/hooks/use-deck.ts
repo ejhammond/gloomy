@@ -155,19 +155,21 @@ export function useDeck(character: Character) {
 
     const klass = classId !== null ? classesById[classId] : null
 
-    const klassPerks = klass.perks.map(p => ({
-      ...p,
-      ...perks[p.id],
-      checks: perkChecks[p.id],
-    }))
+    if (klass !== null) {
+      const klassPerks = klass.perks.map(p => ({
+        ...p,
+        ...perks[p.id],
+        checks: perkChecks[p.id],
+      }))
 
-    klassPerks.forEach(p => {
-      if (p.checks > 0) {
-        Array.from({ length: p.checks }).forEach(() => {
-          deckModifications.push(p.deckModifications)
-        })
-      }
-    })
+      klassPerks.forEach(p => {
+        if (p.checks > 0) {
+          Array.from({ length: p.checks }).forEach(() => {
+            deckModifications.push(p.deckModifications)
+          })
+        }
+      })
+    }
 
     drawnCards.forEach(({ cardType }) => {
       // blessings/curses are completely removed from the deck after they're drawn

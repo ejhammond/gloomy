@@ -14,7 +14,7 @@ export function Counter({
 > & {
   value: number
   onChange: (num: number) => void
-  layout: "horizontal" | "vertical"
+  layout?: "horizontal" | "vertical"
 }) {
   const plusButton = (
     <IconButton key="plus-button" onClick={() => onChange(value + 1)}>

@@ -8,7 +8,7 @@ export function HStack({
 }: {
   children: React.ComponentPropsWithoutRef<"div">["children"]
   spacing: React.CSSProperties["margin"]
-  wrap: boolean
+  wrap?: boolean
   vAlign?: React.CSSProperties["alignItems"]
 }) {
   const nChildren = React.Children.count(children)
