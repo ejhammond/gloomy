@@ -9,7 +9,7 @@ import { statusNameById } from "../../configs/statuses"
 function aspectToString(
   aspect:
     | AttackModifierCardType["primaryAspect"]
-    | AttackModifierCardType["secondaryAspect"]
+    | AttackModifierCardType["secondaryAspect"],
 ) {
   const { type } = aspect
 
@@ -36,6 +36,14 @@ function aspectToString(
 
   if (type === "critical") {
     return "critical"
+  }
+
+  if (type === "blessing") {
+    return "blessing"
+  }
+
+  if (type === "curse") {
+    return "curse"
   }
 
   if (type === "add-target") {

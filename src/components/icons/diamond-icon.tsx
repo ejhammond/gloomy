@@ -72,6 +72,7 @@ const iconNames: Record<DiamondIconType, string> = {
 export function DiamondIcon({ type }: { type: DiamondIconType }) {
   return (
     <div
+      aria-hidden
       style={{
         width: "inherit",
         height: "inherit",

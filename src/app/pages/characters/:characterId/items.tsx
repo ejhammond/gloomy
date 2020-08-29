@@ -8,6 +8,7 @@ import { DamageIcon } from "../../../../components/icons/damage-icon"
 import { Heading } from "../../../../components/heading"
 import { useCharacterRouteContext } from "./routes"
 import { HStack } from "../../../../components/h-stack"
+import { Counter } from "../../../../components/counter"
 
 export const Items: React.FC<RouteComponentProps> = function Items() {
   const { character, dispatchCharacterAction } = useCharacterRouteContext()
@@ -129,16 +130,12 @@ export const Items: React.FC<RouteComponentProps> = function Items() {
         </Typography>
       </GridItem>
       <GridItem span={3}>
-        <TextField
-          type="number"
-          variant="outlined"
-          fullWidth
-          id="encumbrance"
+        <Counter
           value={items.encumbrance}
-          onChange={event => {
+          onChange={num => {
             dispatchCharacterAction({
               type: "items/encumbrance/set",
-              payload: parseInt(event.target.value, 10),
+              payload: num,
             })
           }}
         />

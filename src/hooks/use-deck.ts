@@ -2,10 +2,10 @@ import * as React from "react"
 import sample from "lodash.sample"
 
 import {
-  PerkChecks,
   DeckModifications,
   AttackModifierCardType,
   Character,
+  AttackModifierCard,
 } from "../types"
 import { classesById } from "../configs/classes"
 import { perks } from "../configs/perks"
@@ -44,7 +44,9 @@ const baseDeckModifications: DeckModifications = {
   ],
 }
 
-function deckFromMap(map: Map<AttackModifierCardType, number>) {
+function deckFromMap(
+  map: Map<AttackModifierCardType, number>,
+): Array<{ cardType: AttackModifierCardType; card: AttackModifierCard }> {
   return Array.from(map.entries()).reduce((d, [cardType, count]) => {
     if (count > 0) {
       const card = parse(cardType)
@@ -99,6 +101,17 @@ export function useDeck(character: Character) {
 
   const [drawnCards, setDrawnCards] = React.useState([])
 
+  const [nBlessings, internalSetNBlessings] = React.useState(0)
+  const [nCurses, internalSetNCurses] = React.useState(0)
+  const setNCurses = React.useCallback(
+    (val: number) => internalSetNCurses(Math.max(0, val)),
+    [],
+  )
+  const setNBlessings = React.useCallback(
+    (val: number) => internalSetNBlessings(Math.max(0, val)),
+    [],
+  )
+
   const deck = React.useMemo(() => {
     const deckModifications: DeckModifications[] = [baseDeckModifications]
 
@@ -124,6 +137,20 @@ export function useDeck(character: Character) {
       })
     }
 
+    // handle blessings/curses
+
+    if (nBlessings > 0) {
+      deckModifications.push({
+        add: [{ cardType: "blessing/-/discard", count: nBlessings }],
+      })
+    }
+
+    if (nCurses > 0) {
+      deckModifications.push({
+        add: [{ cardType: "curse/-/discard", count: nCurses }],
+      })
+    }
+
     // handle perks
 
     const klass = classId !== null ? classesById[classId] : null
@@ -143,6 +170,14 @@ export function useDeck(character: Character) {
     })
 
     drawnCards.forEach(({ cardType }) => {
+      // blessings/curses are completely removed from the deck after they're drawn
+      // we leave them in the drawnCards pile so that the user can see them
+      // but it's not necessary to remove them here because they've already been removed from the makeDeck calculation
+      // removing them here would result in 2 blessings/curses being removed for every 1 that's drawn
+      if (cardType === "blessing/-/discard" || cardType === "curse/-/discard") {
+        return
+      }
+
       deckModifications.push({
         remove: [
           {
@@ -154,17 +189,33 @@ export function useDeck(character: Character) {
     })
 
     return makeDeck(deckModifications)
-  }, [drawnCards, classId, encumbrance, perkChecks])
+  }, [drawnCards, classId, encumbrance, perkChecks, nBlessings, nCurses])
 
   const draw = React.useCallback(() => {
-    const drawnCard = sample(deck)
+    // this type looks funny but it works like Flow's $ElementType<array, number>
+    const drawnCard: typeof deck[number] = sample(deck)
+
+    if (drawnCard.cardType === "blessing/-/discard") {
+      setNBlessings(nBlessings - 1)
+    } else if (drawnCard.cardType === "curse/-/discard") {
+      setNCurses(nCurses - 1)
+    }
 
     setDrawnCards(prevDrawnCards => [drawnCard, ...prevDrawnCards])
-  }, [deck])
+  }, [deck, nBlessings, nCurses, setNCurses, setNBlessings])
 
   const shuffle = React.useCallback(() => {
     setDrawnCards([])
   }, [])
 
-  return { deck, drawnCards, draw, shuffle }
+  return {
+    deck,
+    drawnCards,
+    draw,
+    shuffle,
+    setNCurses: (val: number) => setNCurses(Math.max(0, val)),
+    setNBlessings: (val: number) => setNBlessings(Math.max(0, val)),
+    nBlessings,
+    nCurses,
+  }
 }

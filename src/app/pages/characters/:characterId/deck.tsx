@@ -8,6 +8,10 @@ import FloatingActionButton from "@material-ui/core/Fab"
 import { GridContainer, GridItem } from "../../../../components/grid"
 import { useCharacterRouteContext } from "./routes"
 import { AttackModifierCard } from "../../../../components/attack-modifier-card"
+import { Counter } from "../../../../components/counter"
+import { Typography } from "@material-ui/core"
+import { DiamondIcon } from "../../../../components/icons/diamond-icon"
+import { HStack } from "../../../../components/h-stack"
 
 export function Deck(props: RouteComponentProps) {
   const data = useStaticQuery(graphql`
@@ -29,7 +33,16 @@ export function Deck(props: RouteComponentProps) {
     }
   `)
 
-  const { drawnCards, deck, draw, shuffle } = useCharacterRouteContext()
+  const {
+    drawnCards,
+    deck,
+    draw,
+    shuffle,
+    nBlessings,
+    nCurses,
+    setNCurses,
+    setNBlessings,
+  } = useCharacterRouteContext()
 
   const drawnCardTransitions = useTransition(
     drawnCards.map((dc, index) => ({
@@ -75,6 +88,54 @@ export function Deck(props: RouteComponentProps) {
             </div>
           </animated.div>
         ))}
+      </GridItem>
+      <GridItem span={1}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+
+            backgroundColor: "#eee",
+            borderRadius: 4,
+            padding: 8,
+            marginBottom: 8,
+          }}
+        >
+          <div style={{ maxWidth: 80 }}>
+            <DiamondIcon type="add-bless" />
+          </div>
+          <Counter
+            aria-label="blessings"
+            layout="vertical"
+            value={nBlessings}
+            onChange={setNBlessings}
+          />
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+
+            backgroundColor: "#eee",
+            borderRadius: 4,
+            padding: 8,
+            // add enough margin to clear the FAB's in case small screens need to scroll
+            marginBottom: 100,
+          }}
+        >
+          <div style={{ maxWidth: 80 }}>
+            <DiamondIcon type="add-curse" />
+          </div>
+          <Counter
+            aria-label="curses"
+            layout="vertical"
+            value={nCurses}
+            onChange={setNCurses}
+          />
+        </div>
       </GridItem>
       <FloatingActionButton
         size="small"
