@@ -203,10 +203,19 @@ export type Character = {
   xp: number
   gold: number
   notes: string
-  items: string
   battleGoalChecks: number
   perkChecks: { [perkId: string]: number }
   retired: boolean
+  items: {
+    head: string
+    body: string
+    hand1: string
+    hand2: string
+    feet: string
+    bag: { [bagItemId: string]: string }
+    storage: { [storageItemId: string]: string }
+    encumbrance: number
+  }
   createdAt: firebase.firestore.Timestamp
   updatedAt: firebase.firestore.Timestamp
 }

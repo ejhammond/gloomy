@@ -5,7 +5,8 @@ import Img from "gatsby-image"
 import BottomNavigation from "@material-ui/core/BottomNavigation"
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction"
 import Icon from "@material-ui/core/Icon"
-import MenuIcon from "@material-ui/icons/Menu"
+import BusinessCenterIcon from "@material-ui/icons/BusinessCenter"
+import BarChartIcon from "@material-ui/icons/BarChart"
 
 import { Index } from "./index"
 import { Deck } from "./deck"
@@ -78,7 +79,7 @@ export const Character: React.FC<RouteComponentProps<{
       <div>
         <p>Error retrieving character info</p>
         <p>{error.message}</p>
-        <Link to="..">Back to Characters List</Link>
+        <Link to="/app/characters">Back to Characters List</Link>
       </div>
     )
   }
@@ -149,31 +150,14 @@ export const Character: React.FC<RouteComponentProps<{
           />
           <BottomNavigationAction
             component={Link}
-            icon={
-              <Icon>
-                <div
-                  style={{
-                    height: "inherit",
-                    width: "inherit",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Img
-                    style={{ width: "inherit" }}
-                    fluid={data.check.childImageSharp.fluid}
-                  />
-                </div>
-              </Icon>
-            }
+            icon={<BusinessCenterIcon />}
             to="items"
             label="Items"
             value="items"
           />
           <BottomNavigationAction
             component={Link}
-            icon={<MenuIcon />}
+            icon={<BarChartIcon />}
             to="status"
             label="Status"
             value="status"

@@ -15,7 +15,16 @@ function makeNewCharacter(): Character {
     xp: 0,
     gold: 0,
     notes: "",
-    items: "",
+    items: {
+      head: "",
+      body: "",
+      hand1: "",
+      hand2: "",
+      feet: "",
+      bag: {},
+      storage: {},
+      encumbrance: 0,
+    },
     battleGoalChecks: 0,
     perkChecks: {},
     retired: false,
@@ -112,10 +121,10 @@ export function useCharactersList() {
 
         // snapshot current values for rollback
         const previousCharacters = queryCache.getQueryData<CharactersList>(
-          charactersListQueryKey
+          charactersListQueryKey,
         )
         const previousCharacter = queryCache.getQueryData<Character>(
-          characterQueryKey
+          characterQueryKey,
         )
 
         const nextCharacters = { ...previousCharacters }
@@ -151,7 +160,7 @@ export function useCharactersList() {
       onSettled: () => {
         queryCache.refetchQueries(charactersListQueryKey)
       },
-    }
+    },
   )
 
   const [
@@ -176,7 +185,7 @@ export function useCharactersList() {
         // head over to the character page now that the new character is successfully added to the db
         navigate(`/app/characters/${character.id}`)
       },
-    }
+    },
   )
 
   const dispatchCharactersListAction = React.useCallback(
@@ -191,7 +200,7 @@ export function useCharactersList() {
           break
       }
     },
-    [performAddMutation, performDeleteMutation]
+    [performAddMutation, performDeleteMutation],
   )
 
   return {

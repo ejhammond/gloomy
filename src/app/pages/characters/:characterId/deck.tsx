@@ -1,7 +1,7 @@
 import * as React from "react"
 import sample from "lodash.sample"
 import { graphql, useStaticQuery } from "gatsby"
-import { useTransition, animated, useSpring } from "react-spring"
+import { useTransition, animated } from "react-spring"
 import Img from "gatsby-image"
 import { RouteComponentProps } from "@reach/router"
 import FloatingActionButton from "@material-ui/core/Fab"
@@ -13,9 +13,6 @@ import { classesById } from "../../../../configs/classes"
 import { perks } from "../../../../configs/perks"
 import { AttackModifierCard } from "../../../../components/attack-modifier-card"
 import { parse } from "../../../../configs/cards"
-import Typography from "@material-ui/core/Typography"
-
-const AnimatedGridItem = animated(GridItem)
 
 const baseDeckModifications: DeckModifications = {
   add: [
@@ -150,7 +147,30 @@ export function Deck(props: RouteComponentProps) {
     checks: character.perkChecks[p.id],
   }))
 
-  const deckModifications = [baseDeckModifications]
+  const deckModifications: DeckModifications[] = [baseDeckModifications]
+
+  // handle "encumbrance" (adds/removes -1 cards based on equipment)
+  if (character.items.encumbrance > 0) {
+    deckModifications.push({
+      add: [
+        {
+          cardType: "damage(-1)/-",
+          count: character.items.encumbrance,
+        },
+      ],
+    })
+  } else if (character.items.encumbrance < 0) {
+    deckModifications.push({
+      remove: [
+        {
+          cardType: "damage(-1)/-",
+          count: Math.abs(character.items.encumbrance),
+        },
+      ],
+    })
+  }
+
+  // handle perks
   klassPerks.forEach(p => {
     if (p.checks > 0) {
       Array.from({ length: p.checks }).forEach(() => {

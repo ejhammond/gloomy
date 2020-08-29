@@ -3,14 +3,16 @@ import * as React from "react"
 export function HStack({
   children,
   spacing,
+  vAlign,
 }: {
   children: React.ComponentPropsWithoutRef<"div">["children"]
   spacing: React.CSSProperties["margin"]
+  vAlign?: React.CSSProperties["alignItems"]
 }) {
   const nChildren = React.Children.count(children)
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", alignItems: vAlign }}>
       {React.Children.map(children, (child, i) => (
         <div
           key={`h-stack-${i}`}

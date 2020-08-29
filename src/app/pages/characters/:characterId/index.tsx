@@ -226,27 +226,6 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
         />
       </GridItem>
       <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
-        <Typography component="label" htmlFor="character-items">
-          Items
-        </Typography>
-      </GridItem>
-      <GridItem span={3}>
-        <TextField
-          multiline
-          rows={4}
-          variant="outlined"
-          fullWidth
-          id="character-items"
-          value={character.items}
-          onChange={event => {
-            dispatchCharacterAction({
-              type: "items/set",
-              payload: event.target.value,
-            })
-          }}
-        />
-      </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
         <Typography id="character-battle-goals-label">Battle Goals</Typography>
       </GridItem>
       <GridItem span={3}>

@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: "Gloomy",
     description: "Companion app for the game, Gloomhaven",
-    author: "@tripphamm",
+    author: "@ejhammond",
   },
   plugins: [
     "gatsby-plugin-react-helmet",
@@ -27,7 +27,6 @@ module.exports = {
         icon: "src/images/effects/immobilize.png", // This path is relative to the root of the site.
       },
     },
-    "gatsby-plugin-offline",
     "gatsby-plugin-typescript",
     {
       resolve: "gatsby-plugin-create-client-paths",
