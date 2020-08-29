@@ -196,6 +196,8 @@ export type ClassConfiguration = {
   perks: Perk[]
 }
 
+export type PerkChecks = { [perkId: string]: number }
+
 export type Character = {
   id: string
   name: string
@@ -204,7 +206,7 @@ export type Character = {
   gold: number
   notes: string
   battleGoalChecks: number
-  perkChecks: { [perkId: string]: number }
+  perkChecks: PerkChecks
   retired: boolean
   items: {
     head: string

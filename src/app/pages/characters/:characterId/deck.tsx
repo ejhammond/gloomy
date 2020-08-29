@@ -1,5 +1,4 @@
 import * as React from "react"
-import sample from "lodash.sample"
 import { graphql, useStaticQuery } from "gatsby"
 import { useTransition, animated } from "react-spring"
 import Img from "gatsby-image"
@@ -7,91 +6,8 @@ import { RouteComponentProps } from "@reach/router"
 import FloatingActionButton from "@material-ui/core/Fab"
 
 import { GridContainer, GridItem } from "../../../../components/grid"
-import { DeckModifications, AttackModifierCardType } from "../../../../types"
 import { useCharacterRouteContext } from "./routes"
-import { classesById } from "../../../../configs/classes"
-import { perks } from "../../../../configs/perks"
 import { AttackModifierCard } from "../../../../components/attack-modifier-card"
-import { parse } from "../../../../configs/cards"
-
-const baseDeckModifications: DeckModifications = {
-  add: [
-    {
-      cardType: "miss/-/shuffle",
-      count: 1,
-    },
-    {
-      cardType: "damage(-2)/-",
-      count: 1,
-    },
-    {
-      cardType: "damage(-1)/-",
-      count: 5,
-    },
-    {
-      cardType: "damage(0)/-",
-      count: 6,
-    },
-    {
-      cardType: "damage(1)/-",
-      count: 5,
-    },
-    {
-      cardType: "damage(2)/-",
-      count: 1,
-    },
-    {
-      cardType: "critical/-/shuffle",
-      count: 1,
-    },
-  ],
-}
-
-function deckFromMap(map: Map<AttackModifierCardType, number>) {
-  return Array.from(map.entries()).reduce((d, [cardType, count]) => {
-    if (count > 0) {
-      const card = parse(cardType)
-      Array.from({ length: count }).forEach(() => {
-        d.push({
-          cardType,
-          card,
-        })
-      })
-    }
-
-    return d
-  }, [])
-}
-
-function makeDeck(deckModifications: DeckModifications[]) {
-  const cardMap = deckModifications.reduce((deck, mod) => {
-    const { add, remove } = mod
-
-    if (Array.isArray(add)) {
-      add.forEach(({ cardType, count }) => {
-        if (!deck.has(cardType)) {
-          deck.set(cardType, 0)
-        }
-
-        deck.set(cardType, deck.get(cardType) + count)
-      })
-    }
-
-    if (Array.isArray(remove)) {
-      remove.forEach(({ cardType, count }) => {
-        if (!deck.has(cardType)) {
-          deck.set(cardType, 0)
-        }
-
-        deck.set(cardType, deck.get(cardType) - count)
-      })
-    }
-
-    return deck
-  }, new Map())
-
-  return deckFromMap(cardMap)
-}
 
 export function Deck(props: RouteComponentProps) {
   const data = useStaticQuery(graphql`
@@ -113,9 +29,7 @@ export function Deck(props: RouteComponentProps) {
     }
   `)
 
-  const { character } = useCharacterRouteContext()
-
-  const [drawnCards, setDrawnCards] = React.useState([])
+  const { drawnCards, deck, draw, shuffle } = useCharacterRouteContext()
 
   const drawnCardTransitions = useTransition(
     drawnCards.map((dc, index) => ({
@@ -137,60 +51,6 @@ export function Deck(props: RouteComponentProps) {
       leave: { transform: "translate3d(0px,0px,0px)", opacity: 0 },
     },
   )
-
-  const klass =
-    character.classId !== null ? classesById[character.classId] : null
-
-  const klassPerks = klass.perks.map(p => ({
-    ...p,
-    ...perks[p.id],
-    checks: character.perkChecks[p.id],
-  }))
-
-  const deckModifications: DeckModifications[] = [baseDeckModifications]
-
-  // handle "encumbrance" (adds/removes -1 cards based on equipment)
-  if (character.items.encumbrance > 0) {
-    deckModifications.push({
-      add: [
-        {
-          cardType: "damage(-1)/-",
-          count: character.items.encumbrance,
-        },
-      ],
-    })
-  } else if (character.items.encumbrance < 0) {
-    deckModifications.push({
-      remove: [
-        {
-          cardType: "damage(-1)/-",
-          count: Math.abs(character.items.encumbrance),
-        },
-      ],
-    })
-  }
-
-  // handle perks
-  klassPerks.forEach(p => {
-    if (p.checks > 0) {
-      Array.from({ length: p.checks }).forEach(() => {
-        deckModifications.push(p.deckModifications)
-      })
-    }
-  })
-
-  drawnCards.forEach(({ cardType }) => {
-    deckModifications.push({
-      remove: [
-        {
-          cardType,
-          count: 1,
-        },
-      ],
-    })
-  })
-
-  const deck = makeDeck(deckModifications)
 
   return (
     <GridContainer>
@@ -226,9 +86,7 @@ export function Deck(props: RouteComponentProps) {
           right: 40,
         }}
         disabled={drawnCards.length === 0}
-        onClick={() => {
-          setDrawnCards([])
-        }}
+        onClick={shuffle}
       >
         <Img
           style={{ width: "65%" }}
@@ -244,11 +102,7 @@ export function Deck(props: RouteComponentProps) {
           right: 40,
         }}
         disabled={deck.length === 0}
-        onClick={() => {
-          const drawnCard = sample(deck)
-
-          setDrawnCards([drawnCard, ...drawnCards])
-        }}
+        onClick={draw}
       >
         <Img
           style={{ width: "65%" }}

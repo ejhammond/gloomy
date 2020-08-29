@@ -2,7 +2,6 @@ import * as React from "react"
 import { produce } from "immer"
 import { useQuery, useMutation, queryCache } from "react-query"
 import firebase from "gatsby-plugin-firebase"
-import { uuid } from "uuidv4"
 
 import { Character, ClassId } from "../../../../types"
 import { useAsyncDebounce } from "../../../../hooks/use-async-debounce"

@@ -11,22 +11,49 @@ import BarChartIcon from "@material-ui/icons/BarChart"
 import { Index } from "./index"
 import { Deck } from "./deck"
 import { Items } from "./items"
+import { useDeck } from "../../../../hooks/use-deck"
 import { ClassIcon } from "../../../../components/icons/class-icon"
 import { useCharacter } from "./state"
 import { Loading } from "../../../../providers/loading"
 
 const bottomNavHeight = 56
 
+type CharacterRouteContextValue = {
+  character: ReturnType<typeof useCharacter>["character"]
+  dispatchCharacterAction: ReturnType<
+    typeof useCharacter
+  >["dispatchCharacterAction"]
+} & ReturnType<typeof useDeck>
+
 const characterRouteContext = React.createContext<
-  | undefined
-  | {
-      character: ReturnType<typeof useCharacter>["character"]
-      dispatchCharacterAction: ReturnType<
-        typeof useCharacter
-      >["dispatchCharacterAction"]
-    }
+  undefined | CharacterRouteContextValue
 >(undefined)
-const CharacterRouteContextProvider = characterRouteContext.Provider
+
+function CharacterRouteContextProvider(props: {
+  value: {
+    character: ReturnType<typeof useCharacter>["character"]
+    dispatchCharacterAction: ReturnType<
+      typeof useCharacter
+    >["dispatchCharacterAction"]
+  }
+  children: React.ReactNode
+}) {
+  const {
+    children,
+    value: { character, dispatchCharacterAction },
+  } = props
+
+  const deckStuff = useDeck(character)
+
+  return (
+    <characterRouteContext.Provider
+      value={{ character, dispatchCharacterAction, ...deckStuff }}
+    >
+      {children}
+    </characterRouteContext.Provider>
+  )
+}
+
 export function useCharacterRouteContext() {
   const context = React.useContext(characterRouteContext)
 
@@ -92,6 +119,7 @@ export const Character: React.FC<RouteComponentProps<{
         >
           <Router>
             <Index path="/" />
+            {/* we keep the deck stuff at this level so that it doesn't reset as the user switches screens */}
             <Deck path="/deck" />
             <Items path="/items" />
           </Router>
