@@ -21,8 +21,8 @@ module.exports = {
         name: "Gloomy",
         short_name: "Gloomy",
         start_url: "/",
-        background_color: "#412113",
-        theme_color: "#412113",
+        background_color: "#100b06",
+        theme_color: "#100b06",
         display: "minimal-ui",
         icon: "src/images/effects/immobilize.png", // This path is relative to the root of the site.
       },
