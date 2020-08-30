@@ -183,13 +183,13 @@ export const Character: React.FC<RouteComponentProps<{
             label="Items"
             value="items"
           />
-          <BottomNavigationAction
+          {/* <BottomNavigationAction
             component={Link}
             icon={<BarChartIcon />}
             to="status"
             label="Status"
             value="status"
-          />
+          /> */}
         </BottomNavigation>
       </div>
     </>
