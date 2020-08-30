@@ -28,6 +28,7 @@ module.exports = {
       },
     },
     "gatsby-plugin-typescript",
+    "gatsby-plugin-offline",
     {
       resolve: "gatsby-plugin-create-client-paths",
       options: { prefixes: ["/app/*"] },
