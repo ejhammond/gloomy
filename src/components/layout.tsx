@@ -96,7 +96,12 @@ export function Layout({
             <MenuIcon />
           </IconButton>
           <Typography variant="h5" style={{ fontFamily: "Pirata One" }}>
-            {pageTitle}
+            <Link
+              to="/app"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              {pageTitle}
+            </Link>
           </Typography>
           {auth.status === "signed-in" && (
             <Link
