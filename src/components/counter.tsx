@@ -12,18 +12,23 @@ export function Counter({
   React.ComponentPropsWithoutRef<typeof TextField>,
   "onChange" | "value"
 > & {
-  value: number
+  value: number | string
   onChange: (num: number) => void
   layout?: "horizontal" | "vertical"
 }) {
+  let numValue = typeof value === "string" ? parseInt(value, 10) : value
+  if (isNaN(numValue)) {
+    numValue = 0
+  }
+
   const plusButton = (
-    <IconButton key="plus-button" onClick={() => onChange(value + 1)}>
+    <IconButton key="plus-button" onClick={() => onChange(numValue + 1)}>
       <AddIcon />
     </IconButton>
   )
 
   const minusButton = (
-    <IconButton key="minus-button" onClick={() => onChange(value - 1)}>
+    <IconButton key="minus-button" onClick={() => onChange(numValue - 1)}>
       <RemoveIcon />
     </IconButton>
   )
@@ -33,9 +38,11 @@ export function Counter({
       key="textfield"
       type="number"
       variant="outlined"
-      value={value === 0 ? "" : value}
+      value={numValue === 0 ? "" : numValue}
       style={{ maxWidth: 80, backgroundColor: "white" }}
-      inputProps={{ style: { textAlign: "center" } }}
+      inputProps={{
+        style: { textAlign: "center", fontSize: "36px", padding: "8px" },
+      }}
       onChange={event => {
         const num = parseInt(event.target.value, 10)
         if (isNaN(num)) {
