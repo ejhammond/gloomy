@@ -4,6 +4,9 @@ import { RouteComponentProps } from '@reach/router';
 import { useTransition, animated } from 'react-spring';
 import Img from 'gatsby-image';
 import FloatingActionButton from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
+import Popover from '@material-ui/core/Popover';
 
 import { GridContainer, GridItem } from '../../../../components/grid';
 import { useCharacterRouteContext } from './routes';
@@ -30,6 +33,9 @@ export const Deck: React.FC<RouteComponentProps> = () => {
       }
     }
   `);
+
+  const [blessingsPopoverAnchor, setBlessingsPopoverAnchor] = React.useState(null);
+  const [cursesPopoverAnchor, setCursesPopoverAnchor] = React.useState(null);
 
   const {
     drawnCards,
@@ -88,46 +94,55 @@ export const Deck: React.FC<RouteComponentProps> = () => {
         ))}
       </GridItem>
       <GridItem span={1}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-
-            backgroundColor: '#eee',
-            borderRadius: 4,
-            padding: 8,
-            marginBottom: 8,
-          }}
-        >
-          <div style={{ maxWidth: 80 }}>
-            <DiamondIcon type="add-bless" />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div>
+            <IconButton onClick={(e) => setBlessingsPopoverAnchor(e.currentTarget)}>
+              <Badge badgeContent={nBlessings} color="secondary">
+                <div style={{ height: 50, width: 50 }}>
+                  <DiamondIcon type="add-bless" />
+                </div>
+              </Badge>
+            </IconButton>
           </div>
-          <Counter
-            aria-label="blessings"
-            layout="vertical"
-            value={nBlessings}
-            onChange={setNBlessings}
-          />
-        </div>
-
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-
-            backgroundColor: '#eee',
-            borderRadius: 4,
-            padding: 8,
-            // add enough margin to clear the FAB's in case small screens need to scroll
-            marginBottom: 100,
-          }}
-        >
-          <div style={{ maxWidth: 80 }}>
-            <DiamondIcon type="add-curse" />
+          <Popover
+            open={Boolean(blessingsPopoverAnchor)}
+            anchorEl={blessingsPopoverAnchor}
+            onClose={() => setBlessingsPopoverAnchor(null)}
+            anchorOrigin={{
+              vertical: 'center',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'center',
+              horizontal: 'right',
+            }}
+          >
+            <Counter value={nBlessings} onChange={setNBlessings} layout="vertical" hideInput />
+          </Popover>
+          <div>
+            <IconButton onClick={(e) => setCursesPopoverAnchor(e.currentTarget)}>
+              <div style={{ height: 50, width: 50 }}>
+                <Badge badgeContent={nCurses} color="secondary">
+                  <DiamondIcon type="add-curse" />
+                </Badge>
+              </div>
+            </IconButton>
           </div>
-          <Counter aria-label="curses" layout="vertical" value={nCurses} onChange={setNCurses} />
+          <Popover
+            open={Boolean(cursesPopoverAnchor)}
+            anchorEl={cursesPopoverAnchor}
+            onClose={() => setCursesPopoverAnchor(null)}
+            anchorOrigin={{
+              vertical: 'center',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'center',
+              horizontal: 'right',
+            }}
+          >
+            <Counter value={nCurses} onChange={setNCurses} layout="vertical" hideInput />
+          </Popover>
         </div>
       </GridItem>
       <FloatingActionButton

@@ -7,11 +7,13 @@ export function Counter({
   value,
   onChange,
   layout = 'horizontal',
+  hideInput = false,
   ...delegatedProps
 }: Omit<React.ComponentPropsWithoutRef<typeof TextField>, 'onChange' | 'value'> & {
   value: number | string;
   onChange: (num: number) => void;
   layout?: 'horizontal' | 'vertical';
+  hideInput?: boolean;
 }) {
   let numValue = typeof value === 'string' ? parseInt(value, 10) : value;
   if (isNaN(numValue)) {
@@ -54,8 +56,8 @@ export function Counter({
 
   const components =
     layout === 'horizontal'
-      ? [minusButton, textField, plusButton]
-      : [plusButton, textField, minusButton];
+      ? [minusButton, hideInput ? null : textField, plusButton]
+      : [plusButton, hideInput ? null : textField, minusButton];
   return (
     <div
       style={{
