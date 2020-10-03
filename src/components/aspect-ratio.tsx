@@ -1,64 +1,60 @@
-import * as React from "react"
+import * as React from 'react';
 
 type AspectRatioBaseProps = React.HTMLAttributes<HTMLDivElement> & {
-  aspectRatio: number
-}
+  aspectRatio: number;
+};
 
-const AspectRatioBase: React.FC<AspectRatioBaseProps> = function AspectRatioBase(
-  props,
-) {
+const AspectRatioBase: React.FC<AspectRatioBaseProps> = function AspectRatioBase(props) {
   const {
     aspectRatio,
 
     style = {},
     ...otherProps
-  } = props
+  } = props;
 
   return (
     <div
       style={{
-        position: "relative",
+        position: 'relative',
         paddingBottom: `${aspectRatio * 100}%`,
-        width: "100%",
+        width: '100%',
         ...style,
       }}
       {...otherProps}
     />
-  )
-}
+  );
+};
 
 const AspectRatioContent: React.FC<React.HTMLAttributes<
   HTMLDivElement
 >> = function AspectRatioContent(props) {
-  const { style = {}, ...delegated } = props
+  const { style = {}, ...delegated } = props;
 
   return (
     <div
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
         ...style,
       }}
       {...delegated}
     />
-  )
-}
+  );
+};
 
-const AspectRatio: React.FC<AspectRatioBaseProps> = function AspectRatio(
-  props,
-) {
-  const { children, ...delegated } = props
+const AspectRatio: React.FC<AspectRatioBaseProps> = function AspectRatio(props) {
+  const { children, ...delegated } = props;
 
   return (
     <AspectRatioBase {...delegated}>
       <AspectRatioContent>{children}</AspectRatioContent>
     </AspectRatioBase>
-  )
-}
+  );
+};
 
-AspectRatio.displayName = "AspectRatio"
+AspectRatio.displayName = 'AspectRatio';
 
-export { AspectRatio }
+export { AspectRatio };

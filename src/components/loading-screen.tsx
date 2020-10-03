@@ -1,5 +1,5 @@
-import * as React from "react"
-import { Loading } from "../providers/loading"
+import * as React from 'react';
+import { Loading } from '../providers/loading';
 
 export function LoadingScreen({ message }: { message: string }) {
   return (
@@ -7,5 +7,5 @@ export function LoadingScreen({ message }: { message: string }) {
       <Loading />
       <div>{message}</div>
     </>
-  )
+  );
 }

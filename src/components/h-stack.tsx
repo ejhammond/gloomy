@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from 'react';
 
 export function HStack({
   children,
@@ -6,18 +6,18 @@ export function HStack({
   vAlign,
   wrap = true,
 }: {
-  children: React.ComponentPropsWithoutRef<"div">["children"]
-  spacing: React.CSSProperties["margin"]
-  wrap?: boolean
-  vAlign?: React.CSSProperties["alignItems"]
+  children: React.ComponentPropsWithoutRef<'div'>['children'];
+  spacing: React.CSSProperties['margin'];
+  wrap?: boolean;
+  vAlign?: React.CSSProperties['alignItems'];
 }) {
-  const nChildren = React.Children.count(children)
+  const nChildren = React.Children.count(children);
 
   return (
     <div
       style={{
-        display: "flex",
-        flexWrap: wrap ? "wrap" : "nowrap",
+        display: 'flex',
+        flexWrap: wrap ? 'wrap' : 'nowrap',
         alignItems: vAlign,
       }}
     >
@@ -32,5 +32,5 @@ export function HStack({
         </div>
       ))}
     </div>
-  )
+  );
 }

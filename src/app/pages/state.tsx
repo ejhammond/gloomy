@@ -1,96 +1,92 @@
-import * as React from "react"
-import { produce } from "immer"
-import firebase from "gatsby-plugin-firebase"
-import { useQuery, useMutation, queryCache } from "react-query"
+import * as React from 'react';
+import { produce } from 'immer';
+import firebase from 'gatsby-plugin-firebase';
+import { useQuery, useMutation, queryCache } from 'react-query';
 
-import { useUser } from "../providers/auth"
-import { classesById } from "../../configs/classes"
-import { ClassId } from "../../types"
+import { useUser } from '../providers/auth';
+import { classesById } from '../../configs/classes';
+import { ClassId } from '../../types';
 
 type UserSettings = {
-  unlocks: { [C in keyof typeof classesById]: boolean }
-}
+  unlocks: { [C in keyof typeof classesById]: boolean };
+};
 
 type UserSettingsAction = {
-  type: "unlock/toggle"
-  payload: ClassId | "envelope-x"
-}
+  type: 'unlock/toggle';
+  payload: ClassId | 'envelope-x';
+};
 
-const getNextState = produce<
-  (draftState: UserSettings, action: UserSettingsAction) => void
->((draftState, action) => {
-  const { type, payload } = action
+const getNextState = produce<(draftState: UserSettings, action: UserSettingsAction) => void>(
+  (draftState, action) => {
+    const { type, payload } = action;
 
-  switch (type) {
-    case "unlock/toggle":
-      draftState.unlocks[payload] = !draftState.unlocks[payload]
-  }
-})
+    switch (type) {
+      case 'unlock/toggle':
+        draftState.unlocks[payload] = !draftState.unlocks[payload];
+    }
+  },
+);
 
 export function useUserSettings() {
-  const user = useUser()
+  const user = useUser();
 
-  const queryKey = ["user-settings", user.id] as const
+  const queryKey = ['user-settings', user.id] as const;
 
   const { status, data: userSettings, error } = useQuery(queryKey, async () => {
-    const snapshot = await firebase
-      .firestore()
-      .collection("users")
-      .doc(user.id)
-      .get()
+    const snapshot = await firebase.firestore().collection('users').doc(user.id).get();
 
-    const data = snapshot.data() as UserSettings | undefined
+    const data = snapshot.data() as UserSettings | undefined;
 
     if (data === undefined) {
       return {
         unlocks: {},
-      }
+      };
     }
 
-    return data
-  })
+    return data;
+  });
 
   const [mutate] = useMutation(
     async (settings: UserSettings) => {
-      return firebase.firestore().collection("users").doc(user.id).set(settings)
+      return firebase.firestore().collection('users').doc(user.id).set(settings);
     },
     {
-      onMutate: settings => {
+      onMutate: (settings) => {
         // cancel any outgoing re-fetches (so they don't overwrite our optimistic update)
-        queryCache.cancelQueries(queryKey)
+        queryCache.cancelQueries(queryKey);
 
         // snapshot current value for rollback
-        const previousSettings = queryCache.getQueryData(queryKey)
+        const previousSettings = queryCache.getQueryData(queryKey);
 
         // optimistically update
-        queryCache.setQueryData(queryKey, settings)
+        queryCache.setQueryData(queryKey, settings);
 
         // return a rollback fn
         return () => {
-          queryCache.setQueryData(queryKey, previousSettings)
-        }
+          queryCache.setQueryData(queryKey, previousSettings);
+        };
       },
       onError: (error, settings, onMutateResult) => {
         // the result of onMutate is our rollback fn
-        const rollback = onMutateResult as VoidFunction
+        const rollback = onMutateResult as VoidFunction;
 
-        rollback()
+        rollback();
       },
       // always refetch (regardless of success vs error)
       onSettled: () => {
-        queryCache.refetchQueries(queryKey)
+        queryCache.refetchQueries(queryKey);
       },
     },
-  )
+  );
 
   const dispatchUserSettingsAction = React.useCallback(
     (action: UserSettingsAction) => {
-      const nextState = getNextState(userSettings, action)
+      const nextState = getNextState(userSettings, action);
 
-      mutate(nextState)
+      mutate(nextState);
     },
     [userSettings, mutate],
-  )
+  );
 
-  return { userSettings, dispatchUserSettingsAction, status, error }
+  return { userSettings, dispatchUserSettingsAction, status, error };
 }

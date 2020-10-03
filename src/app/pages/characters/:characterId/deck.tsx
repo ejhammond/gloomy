@@ -1,19 +1,17 @@
-import * as React from "react"
-import { graphql, useStaticQuery } from "gatsby"
-import { useTransition, animated } from "react-spring"
-import Img from "gatsby-image"
-import { RouteComponentProps } from "@reach/router"
-import FloatingActionButton from "@material-ui/core/Fab"
+import * as React from 'react';
+import { graphql, useStaticQuery } from 'gatsby';
+import { RouteComponentProps } from '@reach/router';
+import { useTransition, animated } from 'react-spring';
+import Img from 'gatsby-image';
+import FloatingActionButton from '@material-ui/core/Fab';
 
-import { GridContainer, GridItem } from "../../../../components/grid"
-import { useCharacterRouteContext } from "./routes"
-import { AttackModifierCard } from "../../../../components/attack-modifier-card"
-import { Counter } from "../../../../components/counter"
-import { Typography } from "@material-ui/core"
-import { DiamondIcon } from "../../../../components/icons/diamond-icon"
-import { HStack } from "../../../../components/h-stack"
+import { GridContainer, GridItem } from '../../../../components/grid';
+import { useCharacterRouteContext } from './routes';
+import { AttackModifierCard } from '../../../../components/attack-modifier-card';
+import { Counter } from '../../../../components/counter';
+import { DiamondIcon } from '../../../../components/icons/diamond-icon';
 
-export function Deck(props: RouteComponentProps) {
+export const Deck: React.FC<RouteComponentProps> = () => {
   const data = useStaticQuery(graphql`
     query {
       drawCard: file(relativePath: { eq: "general/draw-card.png" }) {
@@ -31,7 +29,7 @@ export function Deck(props: RouteComponentProps) {
         }
       }
     }
-  `)
+  `);
 
   const {
     drawnCards,
@@ -42,7 +40,7 @@ export function Deck(props: RouteComponentProps) {
     nCurses,
     setNCurses,
     setNBlessings,
-  } = useCharacterRouteContext()
+  } = useCharacterRouteContext();
 
   const drawnCardTransitions = useTransition(
     drawnCards.map((dc, index) => ({
@@ -50,9 +48,9 @@ export function Deck(props: RouteComponentProps) {
       key: drawnCards.length - index,
       index,
     })),
-    dc => dc.key,
+    (dc) => dc.key,
     {
-      from: { transform: "translate3d(0px,-100%,0px)", opacity: 0 },
+      from: { transform: 'translate3d(0px,-100%,0px)', opacity: 0 },
       enter: ({ index }) => ({
         transform: `translate3d(0px,${index * 100}%,0px)`,
         opacity: 1,
@@ -61,29 +59,29 @@ export function Deck(props: RouteComponentProps) {
         transform: `translate3d(0px,${index * 100}%,0px)`,
         opacity: 1,
       }),
-      leave: { transform: "translate3d(0px,0px,0px)", opacity: 0 },
+      leave: { transform: 'translate3d(0px,0px,0px)', opacity: 0 },
     },
-  )
+  );
 
   return (
     <GridContainer>
       <GridItem
         span={3}
         style={{
-          position: "relative",
+          position: 'relative',
         }}
       >
-        {drawnCardTransitions.map(({ item, props, key }, i) => (
+        {drawnCardTransitions.map(({ item, props, key }) => (
           <animated.div
             key={key}
             style={{
-              position: "absolute",
-              width: "100%",
+              position: 'absolute',
+              width: '100%',
               paddingBottom: 16,
               ...props,
             }}
           >
-            <div style={{ width: "90%", maxWidth: 400 }}>
+            <div style={{ width: '90%', maxWidth: 400 }}>
               <AttackModifierCard variant="full" card={item.card} />
             </div>
           </animated.div>
@@ -92,11 +90,11 @@ export function Deck(props: RouteComponentProps) {
       <GridItem span={1}>
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
 
-            backgroundColor: "#eee",
+            backgroundColor: '#eee',
             borderRadius: 4,
             padding: 8,
             marginBottom: 8,
@@ -115,11 +113,11 @@ export function Deck(props: RouteComponentProps) {
 
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
 
-            backgroundColor: "#eee",
+            backgroundColor: '#eee',
             borderRadius: 4,
             padding: 8,
             // add enough margin to clear the FAB's in case small screens need to scroll
@@ -129,12 +127,7 @@ export function Deck(props: RouteComponentProps) {
           <div style={{ maxWidth: 80 }}>
             <DiamondIcon type="add-curse" />
           </div>
-          <Counter
-            aria-label="curses"
-            layout="vertical"
-            value={nCurses}
-            onChange={setNCurses}
-          />
+          <Counter aria-label="curses" layout="vertical" value={nCurses} onChange={setNCurses} />
         </div>
       </GridItem>
       <FloatingActionButton
@@ -142,34 +135,28 @@ export function Deck(props: RouteComponentProps) {
         color="primary"
         style={{
           zIndex: 10,
-          position: "fixed",
+          position: 'fixed',
           bottom: 140,
           right: 40,
         }}
         disabled={drawnCards.length === 0}
         onClick={shuffle}
       >
-        <Img
-          style={{ width: "65%" }}
-          fluid={data.shuffle.childImageSharp.fluid}
-        />
+        <Img style={{ width: '65%' }} fluid={data.shuffle.childImageSharp.fluid} />
       </FloatingActionButton>
       <FloatingActionButton
         color="primary"
         style={{
           zIndex: 10,
-          position: "fixed",
+          position: 'fixed',
           bottom: 80,
           right: 40,
         }}
         disabled={deck.length === 0}
         onClick={draw}
       >
-        <Img
-          style={{ width: "65%" }}
-          fluid={data.drawCard.childImageSharp.fluid}
-        />
+        <Img style={{ width: '65%' }} fluid={data.drawCard.childImageSharp.fluid} />
       </FloatingActionButton>
     </GridContainer>
-  )
-}
+  );
+};

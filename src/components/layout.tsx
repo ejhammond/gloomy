@@ -1,80 +1,78 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { Link } from "gatsby"
-import AppBar from "@material-ui/core/AppBar"
-import IconButton from "@material-ui/core/IconButton"
-import Drawer from "@material-ui/core/Drawer"
-import LinearProgress from "@material-ui/core/LinearProgress"
-import Toolbar from "@material-ui/core/Toolbar"
-import Typography from "@material-ui/core/Typography"
-import MenuIcon from "@material-ui/icons/Menu"
-import PersonIcon from "@material-ui/icons/Person"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import ListItemIcon from "@material-ui/core/ListItemIcon"
-import ListItemText from "@material-ui/core/ListItemText"
-import UnlockIcon from "@material-ui/icons/LockOpen"
-import PeopleIcon from "@material-ui/icons/People"
-import SignOutIcon from "@material-ui/icons/ExitToApp"
-import firebase from "gatsby-plugin-firebase"
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'gatsby';
+import AppBar from '@material-ui/core/AppBar';
+import IconButton from '@material-ui/core/IconButton';
+import Drawer from '@material-ui/core/Drawer';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import MenuIcon from '@material-ui/icons/Menu';
+import PersonIcon from '@material-ui/icons/Person';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import UnlockIcon from '@material-ui/icons/LockOpen';
+import PeopleIcon from '@material-ui/icons/People';
+import SignOutIcon from '@material-ui/icons/ExitToApp';
+import firebase from 'gatsby-plugin-firebase';
 
-import { useLoading, Loading } from "../providers/loading"
+import { useLoading, Loading } from '../providers/loading';
 
-import "./reset.css"
-import "./disable-double-tap-zoom.css"
-import "../fonts/fonts.css"
+import './reset.css';
+import './disable-double-tap-zoom.css';
+import '../fonts/fonts.css';
 
 export function Layout({
   children,
   pageTitle,
   lockedHeight = false,
-  auth = { status: "signed-out" },
+  auth = { status: 'signed-out' },
 }) {
-  const loading = useLoading()
+  const loading = useLoading();
 
   // for "lockedHeight" we need the viewport to be exactly 100vh
   // but mobile browser address-bars slide in and out without causing a reflow
   // so we need to keep track of the "real" height of the viewport via JS
-  const [viewportHeight, setViewportHeight] = React.useState<
-    number | undefined
-  >(undefined)
+  const [viewportHeight, setViewportHeight] = React.useState<number | undefined>(undefined);
   React.useLayoutEffect(() => {
     const handler = () => {
-      setViewportHeight(window.innerHeight)
-    }
+      setViewportHeight(window.innerHeight);
+    };
 
     // set initial value
-    handler()
+    handler();
 
-    window.addEventListener("resize", handler)
-    window.addEventListener("orientationchange", handler)
+    window.addEventListener('resize', handler);
+    window.addEventListener('orientationchange', handler);
 
     return () => {
-      window.removeEventListener("resize", handler)
-      window.removeEventListener("orientationchange", handler)
-    }
-  }, [])
+      window.removeEventListener('resize', handler);
+      window.removeEventListener('orientationchange', handler);
+    };
+  }, []);
 
-  const [drawerOpen, setDrawerOpen] = React.useState(false)
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-  const appBarRef = React.useRef<HTMLDivElement | undefined>(undefined)
-  const [appBarHeight, setAppBarHeight] = React.useState<number>(56)
+  const appBarRef = React.useRef<HTMLDivElement | undefined>(undefined);
+  const [appBarHeight, setAppBarHeight] = React.useState<number>(56);
   React.useLayoutEffect(() => {
     const handler = () => {
-      setAppBarHeight(appBarRef.current.clientHeight)
-    }
+      setAppBarHeight(appBarRef.current.clientHeight);
+    };
 
     // set initial value
-    handler()
+    handler();
 
-    window.addEventListener("resize", handler)
-    window.addEventListener("orientationchange", handler)
+    window.addEventListener('resize', handler);
+    window.addEventListener('orientationchange', handler);
 
     return () => {
-      window.removeEventListener("resize", handler)
-      window.removeEventListener("orientationchange", handler)
-    }
-  }, [])
+      window.removeEventListener('resize', handler);
+      window.removeEventListener('orientationchange', handler);
+    };
+  }, []);
 
   return (
     <>
@@ -84,23 +82,17 @@ export function Layout({
             edge="start"
             color="inherit"
             aria-label="menu"
-            onClick={() => setDrawerOpen(prevDrawerOpen => !prevDrawerOpen)}
+            onClick={() => setDrawerOpen((prevDrawerOpen) => !prevDrawerOpen)}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h5" style={{ fontFamily: "Pirata One" }}>
-            <Link
-              to="/app"
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
+          <Typography variant="h5" style={{ fontFamily: 'Pirata One' }}>
+            <Link to="/app" style={{ color: 'inherit', textDecoration: 'none' }}>
               {pageTitle}
             </Link>
           </Typography>
-          {auth.status === "signed-in" && (
-            <Link
-              to="/characters"
-              style={{ marginLeft: "auto", color: "inherit" }}
-            >
+          {auth.status === 'signed-in' && (
+            <Link to="/characters" style={{ marginLeft: 'auto', color: 'inherit' }}>
               <IconButton color="inherit" aria-label="characters">
                 <PersonIcon />
               </IconButton>
@@ -108,7 +100,7 @@ export function Layout({
           )}
         </Toolbar>
         {loading && (
-          <div style={{ position: "absolute", bottom: 0, width: "100%" }}>
+          <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
             <LinearProgress color="secondary" />
           </div>
         )}
@@ -119,9 +111,9 @@ export function Layout({
         <main
           style={{
             ...(lockedHeight && {
-              position: "relative",
+              position: 'relative',
               height: viewportHeight,
-              overflowY: "hidden",
+              overflowY: 'hidden',
             }),
             margin: `0 auto`,
             maxWidth: 960,
@@ -139,7 +131,7 @@ export function Layout({
         onClose={() => setDrawerOpen(false)}
         PaperProps={{
           style: {
-            top: "unset",
+            top: 'unset',
             bottom: 0,
             height: `calc(100% - ${appBarHeight}px)`,
           },
@@ -150,7 +142,7 @@ export function Layout({
             component={Link}
             to="/app/characters"
             onClick={() => setDrawerOpen(false)}
-            style={{ color: "inherit" }}
+            style={{ color: 'inherit' }}
           >
             <ListItemIcon>
               <PeopleIcon />
@@ -161,7 +153,7 @@ export function Layout({
             component={Link}
             to="/app/unlocks"
             onClick={() => setDrawerOpen(false)}
-            style={{ color: "inherit" }}
+            style={{ color: 'inherit' }}
           >
             <ListItemIcon>
               <UnlockIcon />
@@ -171,10 +163,10 @@ export function Layout({
           <ListItem
             button
             onClick={() => {
-              firebase.auth().signOut()
-              setDrawerOpen(false)
+              firebase.auth().signOut();
+              setDrawerOpen(false);
             }}
-            style={{ color: "inherit" }}
+            style={{ color: 'inherit' }}
           >
             <ListItemIcon>
               <SignOutIcon />
@@ -184,11 +176,11 @@ export function Layout({
         </List>
       </Drawer>
     </>
-  )
+  );
 }
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-}
+};
 
-export default Layout
+export default Layout;

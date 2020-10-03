@@ -1,83 +1,80 @@
-import * as React from "react"
-import { RouteComponentProps, Link as ReachLink } from "@reach/router"
-import Button from "@material-ui/core/Button"
-import MenuItem from "@material-ui/core/MenuItem"
-import Select from "@material-ui/core/Select"
-import TextField from "@material-ui/core/TextField"
-import Typography from "@material-ui/core/Typography"
-import FormGroup from "@material-ui/core/FormGroup"
-import Checkbox from "@material-ui/core/Checkbox"
-import Link from "@material-ui/core/Link"
-import red from "@material-ui/core/colors/red"
+import * as React from 'react';
+import { RouteComponentProps, Link as ReachLink } from '@reach/router';
+import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import FormGroup from '@material-ui/core/FormGroup';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import red from '@material-ui/core/colors/red';
 
-import { Heading } from "../../../../components/heading"
-import { perks } from "../../../../configs/perks"
-import { ClassId, PerkData } from "../../../../types"
-import { GridContainer, GridItem } from "../../../../components/grid"
-import { ClassIcon } from "../../../../components/icons/class-icon"
-import { classesById } from "../../../../configs/classes"
-import { getLevel } from "../../../../configs/levels"
-import { AttackModifierCard } from "../../../../components/attack-modifier-card"
-import { HStack } from "../../../../components/h-stack"
-import { parse } from "../../../../configs/cards"
-import { useCharacterRouteContext } from "./routes"
-import { useCharactersRouteContext } from "../routes"
-import { useAppRouteContext } from "../../routes"
-import { useTheme } from "../../../../providers/theme"
+import { Heading } from '../../../../components/heading';
+import { perks } from '../../../../configs/perks';
+import { ClassId, PerkData } from '../../../../types';
+import { GridContainer, GridItem } from '../../../../components/grid';
+import { ClassIcon } from '../../../../components/icons/class-icon';
+import { classesById } from '../../../../configs/classes';
+import { getLevel } from '../../../../configs/levels';
+import { AttackModifierCard } from '../../../../components/attack-modifier-card';
+import { HStack } from '../../../../components/h-stack';
+import { parse } from '../../../../configs/cards';
+import { useCharacterRouteContext } from './routes';
+import { useCharactersRouteContext } from '../routes';
+import { useAppRouteContext } from '../../routes';
+import { useTheme } from '../../../../providers/theme';
 
 function getClassDisplayName(
   classId: ClassId,
-  settings: ReturnType<typeof useAppRouteContext>["userSettings"],
+  settings: ReturnType<typeof useAppRouteContext>['userSettings'],
 ) {
-  const klass = classesById[classId]
+  const klass = classesById[classId];
 
-  if (klass.spoilerTreatment.type === "none") {
-    return klass.name
+  if (klass.spoilerTreatment.type === 'none') {
+    return klass.name;
   }
 
-  if (klass.spoilerTreatment.type === "name-hidden") {
-    return settings.unlocks[classId] === true
-      ? klass.name
-      : klass.spoilerTreatment.safeName
+  if (klass.spoilerTreatment.type === 'name-hidden') {
+    return settings.unlocks[classId] === true ? klass.name : klass.spoilerTreatment.safeName;
   }
 
-  if (klass.spoilerTreatment.type === "completely-hidden") {
-    return settings.unlocks[classId] === true ? klass.name : "???"
+  if (klass.spoilerTreatment.type === 'completely-hidden') {
+    return settings.unlocks[classId] === true ? klass.name : '???';
   }
 
-  throw new Error("Unhandled spoilerTreatment")
+  throw new Error('Unhandled spoilerTreatment');
 }
 
 const countToString = {
-  1: "one",
-  2: "two",
-  3: "three",
-  4: "four",
-}
+  1: 'one',
+  2: 'two',
+  3: 'three',
+  4: 'four',
+};
 
 export const Index: React.FC<RouteComponentProps> = function Index() {
-  const { userSettings } = useAppRouteContext()
-  const { character, dispatchCharacterAction } = useCharacterRouteContext()
-  const { dispatchCharactersListAction } = useCharactersRouteContext()
+  const { userSettings } = useAppRouteContext();
+  const { character, dispatchCharacterAction } = useCharacterRouteContext();
+  const { dispatchCharactersListAction } = useCharactersRouteContext();
 
-  const klass =
-    character.classId !== null ? classesById[character.classId] : null
+  const klass = character.classId !== null ? classesById[character.classId] : null;
 
   const klassPerks =
     klass !== null
-      ? klass.perks.map(p => ({
+      ? klass.perks.map((p) => ({
           ...p,
           ...perks[p.id],
           checks: character.perkChecks[p.id] ?? 0,
         }))
-      : []
+      : [];
 
   return (
     <GridContainer>
       <GridItem span={4}>
         <Heading component="h1">Info</Heading>
       </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
+      <GridItem span={1} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography component="label" htmlFor="character-name">
           Name
         </Typography>
@@ -88,15 +85,15 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           fullWidth
           id="character-name"
           value={character.name}
-          onChange={event => {
+          onChange={(event) => {
             dispatchCharacterAction({
-              type: "name/set",
+              type: 'name/set',
               payload: event.target.value,
-            })
+            });
           }}
         />
       </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
+      <GridItem span={1} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography component="label" htmlFor="character-class">
           Class
         </Typography>
@@ -106,39 +103,37 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           variant="outlined"
           fullWidth
           id="character-class"
-          value={klass !== null ? klass.id : ""}
+          value={klass !== null ? klass.id : ''}
           renderValue={(classId: ClassId) => {
             return (
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ height: 20, width: 20, marginRight: 8 }}>
                   <ClassIcon classId={classId} />
                 </div>
                 <span>{getClassDisplayName(classId, userSettings)}</span>
               </div>
-            )
+            );
           }}
-          onChange={event => {
+          onChange={(event) => {
             const selectedClass: ClassId | null =
-              event.target.value !== "" ? (event.target.value as ClassId) : null
+              event.target.value !== '' ? (event.target.value as ClassId) : null;
             dispatchCharacterAction({
-              type: "class-id/set",
+              type: 'class-id/set',
               payload: selectedClass,
-            })
+            });
           }}
         >
           <MenuItem value="">Select a class</MenuItem>
           {Object.values(classesById)
             // only show unlocked classes
             .filter(
-              c =>
-                c.spoilerTreatment.type === "none" ||
-                userSettings.unlocks[c.id] === true,
+              (c) => c.spoilerTreatment.type === 'none' || userSettings.unlocks[c.id] === true,
             )
-            .map(classOption => (
+            .map((classOption) => (
               <MenuItem
                 key={classOption.id}
                 value={classOption.id}
-                style={{ display: "flex", alignItems: "center" }}
+                style={{ display: 'flex', alignItems: 'center' }}
               >
                 <div style={{ height: 40, width: 40, marginRight: 16 }}>
                   <ClassIcon classId={classOption.id} />
@@ -150,15 +145,11 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
       </GridItem>
       <GridItem span={1}>{/* spacer */}</GridItem>
       <GridItem span={3}>
-        <Link
-          component={ReachLink}
-          to="/app/unlocks"
-          style={{ textDecoration: "underline" }}
-        >
+        <Link component={ReachLink} to="/app/unlocks" style={{ textDecoration: 'underline' }}>
           <Typography>Configure unlocked classes</Typography>
         </Link>
       </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
+      <GridItem span={1} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography component="label" htmlFor="character-xp">
           XP
         </Typography>
@@ -169,22 +160,22 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           fullWidth
           id="character-xp"
           type="number"
-          value={character.xp !== 0 ? character.xp : ""}
-          onChange={event => {
+          value={character.xp !== 0 ? character.xp : ''}
+          onChange={(event) => {
             dispatchCharacterAction({
-              type: "xp/set",
+              type: 'xp/set',
               payload: parseInt(event.target.value, 10) || 0,
-            })
+            });
           }}
         />
       </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
+      <GridItem span={1} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography>
-          <span style={{ fontSize: 12, color: "#999" }}>lvl</span>{" "}
+          <span style={{ fontSize: 12, color: '#999' }}>lvl</span>{' '}
           <span style={{ fontSize: 32 }}>{getLevel(character.xp)}</span>
         </Typography>
       </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
+      <GridItem span={1} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography component="label" htmlFor="character-gold">
           Gold
         </Typography>
@@ -195,16 +186,16 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           fullWidth
           id="character-gold"
           type="number"
-          value={character.gold !== 0 ? character.gold : ""}
-          onChange={event => {
+          value={character.gold !== 0 ? character.gold : ''}
+          onChange={(event) => {
             dispatchCharacterAction({
-              type: "gold/set",
+              type: 'gold/set',
               payload: parseInt(event.target.value, 10) || 0,
-            })
+            });
           }}
         />
       </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
+      <GridItem span={1} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography component="label" htmlFor="character-notes">
           Notes
         </Typography>
@@ -217,24 +208,24 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           fullWidth
           id="character-notes"
           value={character.notes}
-          onChange={event => {
+          onChange={(event) => {
             dispatchCharacterAction({
-              type: "notes/set",
+              type: 'notes/set',
               payload: event.target.value,
-            })
+            });
           }}
         />
       </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
+      <GridItem span={1} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography id="character-battle-goals-label">Battle Goals</Typography>
       </GridItem>
       <GridItem span={3}>
         <FormGroup aria-labelledby="character-battle-goals-label">
           <div
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
             }}
           >
             {Array.from({ length: 6 }).map((_, groupNumber) => (
@@ -248,7 +239,7 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           </div>
         </FormGroup>
       </GridItem>
-      <GridItem span={1} style={{ display: "flex", alignItems: "center" }}>
+      <GridItem span={1} style={{ display: 'flex', alignItems: 'center' }}>
         <Typography id="retired-label">Retired</Typography>
       </GridItem>
       <GridItem span={3}>
@@ -256,11 +247,11 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           aria-labelledby="retired-label"
           color="primary"
           checked={character.retired}
-          onChange={event => {
+          onChange={(event) => {
             dispatchCharacterAction({
-              type: "retired/set",
+              type: 'retired/set',
               payload: event.target.checked,
-            })
+            });
           }}
         />
       </GridItem>
@@ -269,23 +260,21 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
       </GridItem>
       {klass === null && (
         <GridItem span={4}>
-          <Typography>
-            Select a class in order to enable the Perks section
-          </Typography>
+          <Typography>Select a class in order to enable the Perks section</Typography>
         </GridItem>
       )}
       <GridItem
         span={4}
         style={{
-          display: "grid",
-          gridTemplateColumns: "max-content auto",
+          display: 'grid',
+          gridTemplateColumns: 'max-content auto',
           gridRowGap: 8,
-          alignItems: "center",
+          alignItems: 'center',
 
           marginBottom: 16,
         }}
       >
-        {klassPerks.map(perk => (
+        {klassPerks.map((perk) => (
           <React.Fragment key={perk.id}>
             <span>
               {Array.from({ length: perk.stock }).map((_, i) => (
@@ -294,17 +283,17 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
                   key={`perk-${perk.id}/${i}`}
                   id={`perk-${perk.id}/${i}`}
                   checked={perk.checks > i}
-                  onChange={e => {
+                  onChange={(e) => {
                     if (e.target.checked) {
                       dispatchCharacterAction({
-                        type: "perk-checks/add",
+                        type: 'perk-checks/add',
                         payload: perk.id,
-                      })
+                      });
                     } else {
                       dispatchCharacterAction({
-                        type: "perk-checks/remove",
+                        type: 'perk-checks/remove',
                         payload: perk.id,
-                      })
+                      });
                     }
                   }}
                 />
@@ -322,11 +311,7 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
           That feels weird, so we'll just disable the label once all checkboxes are full
         */}
             <label
-              htmlFor={
-                perk.checks < perk.stock
-                  ? `perk-${perk.id}/${perk.stock - 1}`
-                  : undefined
-              }
+              htmlFor={perk.checks < perk.stock ? `perk-${perk.id}/${perk.stock - 1}` : undefined}
             >
               <PerkDescription
                 deckModifications={perk.deckModifications}
@@ -339,13 +324,13 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
       <GridItem span={4}>
         <Heading component="h2">Danger</Heading>
       </GridItem>
-      <GridItem span={4} style={{ display: "flex", justifyContent: "center" }}>
+      <GridItem span={4} style={{ display: 'flex', justifyContent: 'center' }}>
         <Button
           variant="outlined"
           style={{ color: red[700], borderColor: red[700] }}
           onClick={() =>
             dispatchCharactersListAction({
-              type: "delete",
+              type: 'delete',
               payload: character.id,
             })
           }
@@ -354,144 +339,127 @@ export const Index: React.FC<RouteComponentProps> = function Index() {
         </Button>
       </GridItem>
     </GridContainer>
-  )
-}
+  );
+};
 
 function BattleGoalCheckboxGroup({
   groupNumber,
   battleGoalChecks,
   dispatch,
 }: {
-  groupNumber: number
-  battleGoalChecks: number
-  dispatch: ReturnType<
-    typeof useCharacterRouteContext
-  >["dispatchCharacterAction"]
+  groupNumber: number;
+  battleGoalChecks: number;
+  dispatch: ReturnType<typeof useCharacterRouteContext>['dispatchCharacterAction'];
 }) {
-  const theme = useTheme()
+  const theme = useTheme();
 
   return (
     <div
       style={{
-        display: "flex",
+        display: 'flex',
         border: `1px solid ${
           battleGoalChecks >= (groupNumber + 1) * 3
             ? theme.palette.primary.main
-            : "rgba(0, 0, 0, 0.23)"
+            : 'rgba(0, 0, 0, 0.23)'
         }`,
         borderRadius: 4,
         marginBottom: 8,
       }}
     >
       {Array.from({ length: 3 }).map((_, index) => {
-        const checkboxNumber = index + groupNumber * 3 + 1
+        const checkboxNumber = index + groupNumber * 3 + 1;
         return (
           <Checkbox
             color="primary"
             key={checkboxNumber}
             checked={battleGoalChecks >= checkboxNumber}
-            onChange={event => {
+            onChange={(event) => {
               if (event.target.checked && battleGoalChecks < checkboxNumber) {
-                dispatch({ type: "battle-goal-checks/add" })
-              } else if (
-                !event.target.checked &&
-                battleGoalChecks >= checkboxNumber
-              ) {
-                dispatch({ type: "battle-goal-checks/remove" })
+                dispatch({ type: 'battle-goal-checks/add' });
+              } else if (!event.target.checked && battleGoalChecks >= checkboxNumber) {
+                dispatch({ type: 'battle-goal-checks/remove' });
               }
             }}
           />
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 function PerkDescription({
   deckModifications,
   nonDeckEffect,
 }: {
-  deckModifications: PerkData["deckModifications"]
-  nonDeckEffect?: PerkData["nonDeckEffect"]
+  deckModifications: PerkData['deckModifications'];
+  nonDeckEffect?: PerkData['nonDeckEffect'];
 }) {
-  const { add, remove } = deckModifications
+  const { add, remove } = deckModifications;
 
   const modificationType =
     add !== undefined && remove !== undefined
-      ? "replace"
+      ? 'replace'
       : add !== undefined
-      ? "add"
+      ? 'add'
       : remove !== undefined
-      ? "remove"
-      : "none"
+      ? 'remove'
+      : 'none';
 
-  let template: string
+  let template: string;
   switch (modificationType) {
-    case "add":
-      template =
-        nonDeckEffect !== undefined ? `${nonDeckEffect} and add $a` : "Add $a"
-      break
-    case "remove":
-      template =
-        nonDeckEffect !== undefined
-          ? `${nonDeckEffect} and remove $a`
-          : "Remove $r"
-      break
-    case "replace":
+    case 'add':
+      template = nonDeckEffect !== undefined ? `${nonDeckEffect} and add $a` : 'Add $a';
+      break;
+    case 'remove':
+      template = nonDeckEffect !== undefined ? `${nonDeckEffect} and remove $a` : 'Remove $r';
+      break;
+    case 'replace':
       template =
         nonDeckEffect !== undefined
           ? `${nonDeckEffect} and replace $r with $a`
-          : "Replace $r with $a"
-      break
-    case "none":
-      template = nonDeckEffect !== undefined ? nonDeckEffect : ""
+          : 'Replace $r with $a';
+      break;
+    case 'none':
+      template = nonDeckEffect !== undefined ? nonDeckEffect : '';
   }
 
-  const templateParts = template.split(" ")
-  const descriptionParts = []
-  templateParts.forEach(part => {
-    if (part === "$a") {
+  const templateParts = template.split(' ');
+  const descriptionParts = [];
+  templateParts.forEach((part) => {
+    if (part === '$a') {
       add.forEach((a, i) => {
         descriptionParts.push(
-          countToString[a.count] !== undefined
-            ? countToString[a.count]
-            : a.count,
-        )
-        descriptionParts.push(
-          <AttackModifierCard variant="inline" card={parse(a.cardType)} />,
-        )
-        descriptionParts.push(a.count === 1 ? "card" : "cards")
+          countToString[a.count] !== undefined ? countToString[a.count] : a.count,
+        );
+        descriptionParts.push(<AttackModifierCard variant="inline" card={parse(a.cardType)} />);
+        descriptionParts.push(a.count === 1 ? 'card' : 'cards');
         if (i < add.length - 1) {
-          descriptionParts.push("and")
+          descriptionParts.push('and');
         }
-      })
-    } else if (part === "$r") {
+      });
+    } else if (part === '$r') {
       remove.forEach((r, i) => {
         descriptionParts.push(
-          countToString[r.count] !== undefined
-            ? countToString[r.count]
-            : r.count,
-        )
-        descriptionParts.push(
-          <AttackModifierCard variant="inline" card={parse(r.cardType)} />,
-        )
-        descriptionParts.push(r.count === 1 ? "card" : "cards")
+          countToString[r.count] !== undefined ? countToString[r.count] : r.count,
+        );
+        descriptionParts.push(<AttackModifierCard variant="inline" card={parse(r.cardType)} />);
+        descriptionParts.push(r.count === 1 ? 'card' : 'cards');
         if (i < remove.length - 1) {
-          descriptionParts.push("and")
+          descriptionParts.push('and');
         }
-      })
+      });
     } else {
-      descriptionParts.push(part)
+      descriptionParts.push(part);
     }
-  })
+  });
 
   return (
     <Typography component="div">
       <HStack spacing={4}>
         {descriptionParts.map((p, i) => {
-          return <span key={i}>{p}</span>
+          return <span key={i}>{p}</span>;
         })}
       </HStack>
     </Typography>
-  )
+  );
 }

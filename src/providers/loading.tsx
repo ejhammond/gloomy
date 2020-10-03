@@ -1,63 +1,61 @@
-import * as React from "react"
+import * as React from 'react';
 
 const loadingContext = React.createContext<{
-  loadingCount: number
-  incrementLoadingCount: () => void
-  decrementLoadingCount: () => void
-}>(undefined)
+  loadingCount: number;
+  incrementLoadingCount: () => void;
+  decrementLoadingCount: () => void;
+}>(undefined);
 
-const LoadingContextProvider = loadingContext.Provider
+const LoadingContextProvider = loadingContext.Provider;
 
 export function LoadingProvider({ children }) {
-  const [loadingCount, setLoadingCount] = React.useState(0)
+  const [loadingCount, setLoadingCount] = React.useState(0);
 
   const incrementLoadingCount = React.useCallback(() => {
-    setLoadingCount(prevCount => {
-      return prevCount + 1
-    })
-  }, [])
+    setLoadingCount((prevCount) => {
+      return prevCount + 1;
+    });
+  }, []);
 
   const decrementLoadingCount = React.useCallback(() => {
-    setLoadingCount(prevCount => {
-      return prevCount - 1
-    })
-  }, [])
+    setLoadingCount((prevCount) => {
+      return prevCount - 1;
+    });
+  }, []);
 
   return (
-    <LoadingContextProvider
-      value={{ loadingCount, decrementLoadingCount, incrementLoadingCount }}
-    >
+    <LoadingContextProvider value={{ loadingCount, decrementLoadingCount, incrementLoadingCount }}>
       {children}
     </LoadingContextProvider>
-  )
+  );
 }
 
 export function Loading() {
-  const context = React.useContext(loadingContext)
+  const context = React.useContext(loadingContext);
 
   if (context === undefined) {
-    throw new Error("Missing LoadingProvider")
+    throw new Error('Missing LoadingProvider');
   }
 
-  const { incrementLoadingCount, decrementLoadingCount } = context
+  const { incrementLoadingCount, decrementLoadingCount } = context;
 
   React.useEffect(() => {
-    incrementLoadingCount()
+    incrementLoadingCount();
 
-    return decrementLoadingCount
-  })
+    return decrementLoadingCount;
+  });
 
-  return null
+  return null;
 }
 
 export function useLoading() {
-  const context = React.useContext(loadingContext)
+  const context = React.useContext(loadingContext);
 
   if (context === undefined) {
-    throw new Error("Missing LoadingProvider")
+    throw new Error('Missing LoadingProvider');
   }
 
-  const { loadingCount } = context
+  const { loadingCount } = context;
 
-  return loadingCount !== 0
+  return loadingCount !== 0;
 }

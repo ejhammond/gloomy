@@ -1,51 +1,49 @@
-import * as React from "react"
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
-import firebase from "gatsby-plugin-firebase"
+import * as React from 'react';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from 'gatsby-plugin-firebase';
 
-import { App } from "../app/pages/routes"
-import { Layout } from "../components/layout"
-import { UserProvider, useAuthState } from "../app/providers/auth"
-import SEO from "../components/seo"
+import { App } from '../app/pages/routes';
+import { Layout } from '../components/layout';
+import { UserProvider, useAuthState } from '../app/providers/auth';
+import SEO from '../components/seo';
 
 function SSRGate({ children }) {
-  const [mounted, setMounted] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    setMounted(true)
-    return () => setMounted(false)
-  }, [])
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   if (mounted === false) {
-    return null
+    return null;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 function UserGate({ children }) {
-  const { status } = useAuthState()
+  const { status } = useAuthState();
 
   const uiConfig = React.useMemo(() => {
     return {
-      signInFlow: "redirect",
+      signInFlow: 'redirect',
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
       ],
-    }
-  }, [])
+    };
+  }, []);
 
-  if (status === "authenticating") {
-    return <div>Authenticating...</div>
+  if (status === 'authenticating') {
+    return <div>Authenticating...</div>;
   }
 
-  if (status === "signed-out") {
-    return (
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
-    )
+  if (status === 'signed-out') {
+    return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 export default function AppPage() {
@@ -60,5 +58,5 @@ export default function AppPage() {
         </UserProvider>
       </SSRGate>
     </Layout>
-  )
+  );
 }

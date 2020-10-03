@@ -8,12 +8,12 @@ export const requiredXPToLevel = {
   345: 7,
   420: 8,
   500: 9,
-}
+};
 
 export function getLevel(xp) {
   const requiredXP = Object.keys(requiredXPToLevel)
-    .map(reqXP => parseInt(reqXP, 10))
+    .map((reqXP) => parseInt(reqXP, 10))
     .sort((a, b) => b - a)
-    .find(reqXP => xp >= reqXP)
-  return requiredXPToLevel[requiredXP]
+    .find((reqXP) => xp >= reqXP);
+  return requiredXPToLevel[requiredXP];
 }
