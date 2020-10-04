@@ -1,18 +1,19 @@
 import * as React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, Link } from '@reach/router';
 import { useTransition, animated } from 'react-spring';
 import Img from 'gatsby-image';
 import FloatingActionButton from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Popover from '@material-ui/core/Popover';
+import SearchIcon from '@material-ui/icons/Search';
 
-import { GridContainer, GridItem } from '../../../../components/grid';
-import { useCharacterRouteContext } from './routes';
-import { AttackModifierCard } from '../../../../components/attack-modifier-card';
-import { Counter } from '../../../../components/counter';
-import { DiamondIcon } from '../../../../components/icons/diamond-icon';
+import { GridContainer, GridItem } from '../../../../../components/grid';
+import { useCharacterRouteContext } from '../routes';
+import { AttackModifierCard } from '../../../../../components/attack-modifier-card';
+import { Counter } from '../../../../../components/counter';
+import { DiamondIcon } from '../../../../../components/icons/diamond-icon';
 
 export const Deck: React.FC<RouteComponentProps> = () => {
   const data = useStaticQuery(graphql`
@@ -103,22 +104,22 @@ export const Deck: React.FC<RouteComponentProps> = () => {
                 </div>
               </Badge>
             </IconButton>
+            <Popover
+              open={Boolean(blessingsPopoverAnchor)}
+              anchorEl={blessingsPopoverAnchor}
+              onClose={() => setBlessingsPopoverAnchor(null)}
+              anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'center',
+                horizontal: 'right',
+              }}
+            >
+              <Counter value={nBlessings} onChange={setNBlessings} layout="vertical" hideInput />
+            </Popover>
           </div>
-          <Popover
-            open={Boolean(blessingsPopoverAnchor)}
-            anchorEl={blessingsPopoverAnchor}
-            onClose={() => setBlessingsPopoverAnchor(null)}
-            anchorOrigin={{
-              vertical: 'center',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'center',
-              horizontal: 'right',
-            }}
-          >
-            <Counter value={nBlessings} onChange={setNBlessings} layout="vertical" hideInput />
-          </Popover>
           <div>
             <IconButton onClick={(e) => setCursesPopoverAnchor(e.currentTarget)}>
               <div style={{ height: 50, width: 50 }}>
@@ -127,31 +128,46 @@ export const Deck: React.FC<RouteComponentProps> = () => {
                 </Badge>
               </div>
             </IconButton>
+            <Popover
+              open={Boolean(cursesPopoverAnchor)}
+              anchorEl={cursesPopoverAnchor}
+              onClose={() => setCursesPopoverAnchor(null)}
+              anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'center',
+                horizontal: 'right',
+              }}
+            >
+              <Counter value={nCurses} onChange={setNCurses} layout="vertical" hideInput />
+            </Popover>
           </div>
-          <Popover
-            open={Boolean(cursesPopoverAnchor)}
-            anchorEl={cursesPopoverAnchor}
-            onClose={() => setCursesPopoverAnchor(null)}
-            anchorOrigin={{
-              vertical: 'center',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'center',
-              horizontal: 'right',
-            }}
-          >
-            <Counter value={nCurses} onChange={setNCurses} layout="vertical" hideInput />
-          </Popover>
         </div>
       </GridItem>
+      <FloatingActionButton
+        component={Link}
+        to="search"
+        size="small"
+        color="primary"
+        style={{
+          zIndex: 10,
+          position: 'fixed',
+          bottom: 200,
+          right: 40,
+        }}
+        disabled={deck.length === 0}
+      >
+        <SearchIcon />
+      </FloatingActionButton>
       <FloatingActionButton
         size="small"
         color="primary"
         style={{
           zIndex: 10,
           position: 'fixed',
-          bottom: 140,
+          bottom: 150,
           right: 40,
         }}
         disabled={drawnCards.length === 0}

@@ -9,6 +9,7 @@ import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 
 import { Index } from './index';
 import { Deck } from './deck';
+import { DeckSearch } from './deck/search';
 import { Items } from './items';
 import { useDeck } from '../../../../hooks/use-deck';
 import { ClassIcon } from '../../../../components/icons/class-icon';
@@ -110,6 +111,7 @@ export const Character: React.FC<RouteComponentProps<{
             <Index path="/" />
             {/* we keep the deck stuff at this level so that it doesn't reset as the user switches screens */}
             <Deck path="/deck" />
+            <DeckSearch path="/deck/search" />
             <Items path="/items" />
           </Router>
         </CharacterRouteContextProvider>

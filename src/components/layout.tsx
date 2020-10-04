@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
+import { useNavigate } from '@reach/router';
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
@@ -8,7 +9,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import PersonIcon from '@material-ui/icons/Person';
+import BackArrowIcon from '@material-ui/icons/ArrowBack';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -24,13 +25,9 @@ import './reset.css';
 import './disable-double-tap-zoom.css';
 import '../fonts/fonts.css';
 
-export function Layout({
-  children,
-  pageTitle,
-  lockedHeight = false,
-  auth = { status: 'signed-out' },
-}) {
+export function Layout({ children, pageTitle, lockedHeight = false }) {
   const loading = useLoading();
+  const navigate = useNavigate();
 
   // for "lockedHeight" we need the viewport to be exactly 100vh
   // but mobile browser address-bars slide in and out without causing a reflow
@@ -78,26 +75,21 @@ export function Layout({
     <>
       <AppBar position="fixed" ref={appBarRef}>
         <Toolbar>
+          <IconButton color="inherit" aria-label="back" onClick={() => navigate(-1)}>
+            <BackArrowIcon />
+          </IconButton>
+          <Typography variant="h5" style={{ fontFamily: 'Pirata One', margin: '0 auto' }}>
+            <Link to="/app" style={{ color: 'inherit', textDecoration: 'none' }}>
+              {pageTitle}
+            </Link>
+          </Typography>
           <IconButton
-            edge="start"
             color="inherit"
             aria-label="menu"
             onClick={() => setDrawerOpen((prevDrawerOpen) => !prevDrawerOpen)}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h5" style={{ fontFamily: 'Pirata One' }}>
-            <Link to="/app" style={{ color: 'inherit', textDecoration: 'none' }}>
-              {pageTitle}
-            </Link>
-          </Typography>
-          {auth.status === 'signed-in' && (
-            <Link to="/characters" style={{ marginLeft: 'auto', color: 'inherit' }}>
-              <IconButton color="inherit" aria-label="characters">
-                <PersonIcon />
-              </IconButton>
-            </Link>
-          )}
         </Toolbar>
         {loading && (
           <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>

@@ -94,7 +94,9 @@ export function useDeck(character: Character) {
     items: { encumbrance },
   } = character;
 
-  const [drawnCards, setDrawnCards] = React.useState([]);
+  const [drawnCards, setDrawnCards] = React.useState<
+    { cardType: AttackModifierCardType; card: AttackModifierCard }[]
+  >([]);
 
   const [nBlessings, internalSetNBlessings] = React.useState(0);
   const [nCurses, internalSetNCurses] = React.useState(0);
